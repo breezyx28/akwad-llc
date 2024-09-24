@@ -52,6 +52,23 @@ export const navData = [
     items: [
       { title: 'App', path: paths.dashboard.general.app, icon: ICONS.dashboard },
       { title: 'Dashboard', path: paths.dashboard.root, icon: ICONS.dashboard },
+      {
+        title: 'Brands',
+        path: paths.dashboard.brand.root,
+        icon: ICONS.kanban,
+        children: [
+          { title: 'List', path: paths.dashboard.brand.root },
+          { title: 'Discount Codes', path: paths.dashboard.brand.discountCodes },
+          { title: 'Banners', path: paths.dashboard.brand.banners },
+        ],
+      },
+      { title: 'Users', path: paths.dashboard.user.root, icon: ICONS.user,
+        children: [
+          { title: 'List', path: paths.dashboard.user.root },
+          { title: 'User Suggestions', path: paths.dashboard.user.suggestions },
+          { title: 'Search Logs', path: paths.dashboard.user.searchLogs },
+        ],
+       },
       { title: 'Ecommerce', path: paths.dashboard.general.ecommerce, icon: ICONS.ecommerce },
       { title: 'Analytics', path: paths.dashboard.general.analytics, icon: ICONS.analytics },
       { title: 'Banking', path: paths.dashboard.general.banking, icon: ICONS.banking },

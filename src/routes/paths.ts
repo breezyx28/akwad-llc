@@ -113,6 +113,8 @@ export const paths = {
     },
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
+      suggestions: `${ROOTS.DASHBOARD}/suggestions`,
+      searchLogs: `${ROOTS.DASHBOARD}/search-logs`,
       new: `${ROOTS.DASHBOARD}/user/new`,
       list: `${ROOTS.DASHBOARD}/user/list`,
       cards: `${ROOTS.DASHBOARD}/user/cards`,
@@ -122,6 +124,11 @@ export const paths = {
       demo: {
         edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
       },
+    },
+    brand: {
+      root: `${ROOTS.DASHBOARD}/brands`,
+      discountCodes: `${ROOTS.DASHBOARD}/brands/discount-codes`,
+      banners: `${ROOTS.DASHBOARD}/brands/banners`,
     },
     product: {
       root: `${ROOTS.DASHBOARD}/product`,
