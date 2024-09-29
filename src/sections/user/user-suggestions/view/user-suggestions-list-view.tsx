@@ -43,7 +43,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { UserTableRow } from '../user-suggestions-table-row';
+import { UserTableRow } from '../user-table-row';
 import { DiscountTableToolbar } from '../user-suggestions-table-toolbar';
 import { DiscountCodesTableFiltersResult } from '../user-suggestions-table-filters-result';
 

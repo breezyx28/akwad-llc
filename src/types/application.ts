@@ -2,20 +2,24 @@ import type { IDateValue, ISocialLink } from './common';
 
 // ----------------------------------------------------------------------
 
-export type IBrandTableFilters = {
-  name: string;
-  filter: string[];
-  status: string;
+export type IApplicationTableFilters = {
+  brand: string;
+  avatarUrl?: string;
+  numberOfUsers: number;
+  numberOfDownloads: number;
+  numberOfSessions: number;
+  visits: number;
+  usageProcesses: number;
 };
 
-export type IBrandProfileCover = {
+export type IUserProfileCover = {
   name: string;
   role: string;
   coverUrl: string;
   avatarUrl: string;
 };
 
-export type IBrandProfile = {
+export type IUserProfile = {
   id: string;
   role: string;
   quote: string;
@@ -28,28 +32,28 @@ export type IBrandProfile = {
   socialLinks: ISocialLink;
 };
 
-export type IBrandProfileFollower = {
+export type IUserProfileFollower = {
   id: string;
   name: string;
   country: string;
   avatarUrl: string;
 };
 
-export type IBrandProfileGallery = {
+export type IUserProfileGallery = {
   id: string;
   title: string;
   imageUrl: string;
   postedAt: IDateValue;
 };
 
-export type IBrandProfileFriend = {
+export type IUserProfileFriend = {
   id: string;
   name: string;
   role: string;
   avatarUrl: string;
 };
 
-export type IBrandProfilePost = {
+export type IUserProfilePost = {
   id: string;
   media: string;
   message: string;
@@ -63,7 +67,7 @@ export type IBrandProfilePost = {
   }[];
 };
 
-export type IBrandCard = {
+export type IUserCard = {
   id: string;
   name: string;
   role: string;
@@ -74,24 +78,18 @@ export type IBrandCard = {
   totalFollowing: number;
 };
 
-export type IBrandItem = {
+export type IApplicationItem = {
   id: string;
-  name: string;
-  city: string;
-  role: string;
-  email: string;
-  state: string;
-  status: string;
-  address: string;
-  country: string;
-  zipCode: string;
-  company: string;
-  avatarUrl: string;
-  phoneNumber: string;
-  isVerified: boolean;
+  brand: string;
+  avatarUrl?: string;
+  numberOfUsers: number;
+  numberOfDownloads: number;
+  numberOfSessions: number;
+  visits: number;
+  usageProcesses: number;
 };
 
-export type IBrandAccount = {
+export type IUserAccount = {
   city: string;
   email: string;
   state: string;
@@ -105,24 +103,9 @@ export type IBrandAccount = {
   photoURL: File | string | null;
 };
 
-export type IBrandAccountBillingHistory = {
+export type IUserAccountBillingHistory = {
   id: string;
   price: number;
   invoiceNumber: string;
   createdAt: IDateValue;
-};
-
-export type IBannerItem = {
-  id: number;
-  name: string;
-  description: string;
-  category_id: 1;
-  keywords: string;
-  link: string;
-  image?: string;
-  opend: boolean;
-  status: boolean;
-  created_at: string;
-  updated_at: string;
-  codes?: string[];
 };

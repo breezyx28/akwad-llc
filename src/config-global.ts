@@ -14,7 +14,7 @@ export type ConfigValue = {
     version: string;
   };
   auth: {
-    method: 'jwt' | 'amplify' | 'firebase' | 'supabase' | 'auth0';
+    method: 'jwt' | 'amplify' | 'firebase' | 'supabase' | 'auth0' | 'sanctum';
     skip: boolean;
     redirectPath: string;
   };
@@ -51,7 +51,7 @@ export const CONFIG: ConfigValue = {
    * @method jwt | amplify | firebase | supabase | auth0
    */
   auth: {
-    method: 'jwt',
+    method: 'sanctum',
     skip: false,
     redirectPath: paths.dashboard.root,
   },

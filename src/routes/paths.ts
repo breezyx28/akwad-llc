@@ -48,6 +48,10 @@ export const paths = {
   },
   // AUTH
   auth: {
+    sanctum: {
+      signIn: `/sign-in`,
+      verify: `/verification`,
+    },
     amplify: {
       signIn: `${ROOTS.AUTH}/amplify/sign-in`,
       verify: `${ROOTS.AUTH}/amplify/verify`,

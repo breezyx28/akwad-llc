@@ -19,7 +19,6 @@ import { AppFeatured } from '../dashboard-featured';
 import { BankingOverview } from '../banking-overview';
 import { AppNewInvoice } from '../dashboard-new-invoice';
 import { AppTopAuthors } from '../dashboard-top-authors';
-import { DashboardTopRelated } from '../dashboard-top-related';
 import { AppAreaInstalled } from '../dashboard-area-installed';
 import { AppWidgetSummary } from '../dashboard-widget-summary';
 import { AppCurrentDownload } from '../dashboard-current-download';
@@ -29,7 +28,9 @@ import { AppTopInstalledCountries } from '../dashboard-top-installed-countries';
 import { Typography } from '@mui/material';
 import { CONFIG } from 'src/config-global';
 import { Iconify } from 'src/components/iconify';
-import { DashboardApplicationsListView } from '../user-list-view';
+import { UserListView } from '../user-list-view';
+import { DashboardTopPerformance } from '../dashboard-top-performance';
+import { DashboardApplicationsListView } from '../dashboard-application-list-view';
 
 // ----------------------------------------------------------------------
 
@@ -120,8 +121,8 @@ export function OverviewDashboardView() {
           </Box>
         </Grid>
 
-        <Grid xs={12} md={6} lg={4}>
-          <DashboardTopRelated title="Top Performance" list={_appRelated} />
+        <Grid xs={12} md={5} lg={4}>
+          <DashboardTopPerformance title="Top Performance" list={_appRelated} />
         </Grid>
 
         <Grid xs={12} md={12} lg={12}>

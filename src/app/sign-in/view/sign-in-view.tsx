@@ -1,24 +1,29 @@
 'use client';
 
 import { z as zod } from 'zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import Link from '@mui/material/Link';
+import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { Form, Field } from 'src/components/hook-form';
 import { Iconify } from 'src/components/iconify';
+import { Form, Field } from 'src/components/hook-form';
+
+import { useAuthContext } from 'src/auth/hooks';
+import { signInWithPassword } from 'src/auth/context/sanctum';
 import { Box } from '@mui/material';
 import { CONFIG } from 'src/config-global';
 
@@ -39,10 +44,19 @@ export const SignInSchema = zod.object({
 
 // ----------------------------------------------------------------------
 
-export function CenteredSignInView() {
+export function SignInView() {
+  const router = useRouter();
+
+  const { checkUserSession } = useAuthContext();
+
+  const [errorMsg, setErrorMsg] = useState('');
+
   const password = useBoolean();
 
-  const defaultValues = { email: '', password: '' };
+  const defaultValues = {
+    email: '',
+    password: '',
+  };
 
   const methods = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
@@ -56,10 +70,13 @@ export function CenteredSignInView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.info('DATA', data);
+      await signInWithPassword({ email: data.email, password: data.password });
+      await checkUserSession?.();
+
+      router.refresh();
     } catch (error) {
       console.error(error);
+      setErrorMsg(error instanceof Error ? error.message : error);
     }
   });
 
@@ -124,6 +141,12 @@ export function CenteredSignInView() {
       {renderLogo}
 
       {renderHead}
+
+      {!!errorMsg && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {errorMsg}
+        </Alert>
+      )}
 
       <Form methods={methods} onSubmit={onSubmit}>
         {renderForm}

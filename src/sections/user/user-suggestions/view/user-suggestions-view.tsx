@@ -5,8 +5,6 @@ import type { IUserItem, IUserTableFilters } from 'src/types/user';
 import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
@@ -43,7 +41,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { UserTableRow } from '../user-suggestions-table-row';
+import { UserTableRow } from '../user-table-row';
 import { UserSuggestionsTableFiltersResult } from '../user-suggestions-table-filters-result';
 import { IBrandTableFilters } from 'src/types/brand';
 import { UserSuggestionsTableToolbar } from '../user-suggestions-table-toolbar';

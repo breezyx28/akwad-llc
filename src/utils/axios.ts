@@ -6,7 +6,7 @@ import { CONFIG } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: CONFIG.site.serverUrl });
+const axiosInstance = axios.create({ baseURL: CONFIG.site.serverUrl, withCredentials: true });
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -38,8 +38,8 @@ export const endpoints = {
   calendar: '/api/calendar',
   auth: {
     me: '/api/auth/me',
-    signIn: '/api/auth/sign-in',
-    signUp: '/api/auth/sign-up',
+    signIn: '/api/login',
+    signUp: '/api/register',
   },
   mail: {
     list: '/api/mail/list',
@@ -56,5 +56,47 @@ export const endpoints = {
     list: '/api/product/list',
     details: '/api/product/details',
     search: '/api/product/search',
+  },
+  categories: {
+    list: '/api/category/index',
+  },
+  brands: {
+    banners: {
+      list: '/api/brand/banner/index',
+      store: '/api/brand/banner/store',
+      edit: '/api/brand/banner/edit/',
+      delete: '/api/brand/banner/delete/',
+      increaseBannerClicks: '/api/user/increase_clicks?type=3',
+    },
+    codes: {
+      list: '/api/brand/code/index',
+      store: '/api/brand/code/store',
+      edit: '/api/brand/code/edit/',
+      delete: '/api/brand/code/delete/',
+      increaseCodeUses: '/api/user/increase_clicks?type=2',
+      searchByName: '/api/brand/code/search',
+      searchByCategory: '/api/brand/code/search?type=1',
+      searchByStatus: '/api/brand/code/search?type=2',
+    },
+    list: '/api/brand/index',
+    store: '/api/brand/store',
+    edit: '/api/brand/edit/',
+    delete: '/api/brand/delete/',
+    increaseBrandOpen: '/api/user/increase_clicks?type=2',
+    searchByName: '/api/brand/search',
+    searchByCategory: '/api/brand/search?type=1',
+    searchByStatus: '/api/brand/search?type=2',
+  },
+  users: {
+    suggestions: {
+      list: '/api/user/suggestions/index',
+      store: '/api/user/suggestions/store',
+    },
+    searchLogs: {
+      list: '/api/user/searchlogs/index',
+      store: '/api/user/searchlogs/store',
+    },
+    list: '/api/user/index',
+    show: '/api/user/show/',
   },
 };

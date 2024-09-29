@@ -47,6 +47,7 @@ export function AuthGuard({ children }: Props) {
       const { method } = CONFIG.auth;
 
       const signInPath = {
+        sanctum: paths.auth.sanctum.signIn,
         jwt: paths.auth.jwt.signIn,
         auth0: paths.auth.auth0.signIn,
         amplify: paths.auth.amplify.signIn,

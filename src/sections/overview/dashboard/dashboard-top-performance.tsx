@@ -45,7 +45,7 @@ type Props = CardProps & {
   }[];
 };
 
-export function DashboardTopRelated({ title, subheader, list, ...other }: Props) {
+export function DashboardTopPerformance({ title, subheader, list, ...other }: Props) {
   const tabs = useTabs('brands');
 
   const renderTabs = (
@@ -70,7 +70,7 @@ export function DashboardTopRelated({ title, subheader, list, ...other }: Props)
       <Scrollbar sx={{ minHeight: 384 }}>
         <Box sx={{ p: 3, gap: 3, minWidth: 360, display: 'flex', flexDirection: 'column' }}>
           {list.map((item) => (
-            <Item key={item.id} item={item} />
+            <TopBrandsItem key={item.id} item={item} />
           ))}
         </Box>
       </Scrollbar>
@@ -84,7 +84,7 @@ type ItemProps = BoxProps & {
   item: Props['list'][number];
 };
 
-function Item({ item, sx, ...other }: ItemProps) {
+function TopBrandsItem({ item, sx, ...other }: ItemProps) {
   return (
     <Box sx={{ gap: 2, display: 'flex', alignItems: 'center', ...sx }} {...other}>
       <Avatar
@@ -127,19 +127,102 @@ function Item({ item, sx, ...other }: ItemProps) {
             <Iconify width={16} icon="heroicons:server-solid" sx={{ color: 'text.disabled' }} />
             {fData(item.size)}
           </Box>
+        </Stack>
+      </div>
+    </Box>
+  );
+}
+function TopSearchsItem({ item, sx, ...other }: ItemProps) {
+  return (
+    <Box sx={{ gap: 2, display: 'flex', alignItems: 'center', ...sx }} {...other}>
+      <Avatar
+        variant="rounded"
+        src={item.shortcut}
+        sx={{
+          p: 1,
+          width: 48,
+          height: 48,
+          bgcolor: 'background.neutral',
+        }}
+      />
 
-          {/* <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
-            <Rating
-              readOnly
-              size="small"
-              precision={0.5}
-              name="reviews"
-              value={item.ratingNumber}
-              max={1}
-              sx={{ [` .${svgIconClasses.root}`]: { width: 16, height: 16 } }}
-            />
-            {fShortenNumber(item.totalReviews)}
-          </Box> */}
+      <div>
+        <Box sx={{ mb: 1, gap: 1, display: 'flex', alignItems: 'center' }}>
+          <Typography variant="subtitle2" noWrap>
+            {item.name}
+          </Typography>
+
+          <Label color={item.price === 0 ? 'default' : 'success'} sx={{ height: 20 }}>
+            {item.price === 0 ? 'Free' : fCurrency(item.price)}
+          </Label>
+        </Box>
+
+        <Stack
+          spacing={1}
+          direction="row"
+          alignItems="center"
+          divider={
+            <Box sx={{ width: 4, height: 4, borderRadius: '50%', bgcolor: 'text.disabled' }} />
+          }
+          sx={{ typography: 'caption' }}
+        >
+          <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
+            <Iconify width={16} icon="solar:download-bold" sx={{ color: 'text.disabled' }} />
+            {fShortenNumber(item.downloaded)}
+          </Box>
+
+          <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
+            <Iconify width={16} icon="heroicons:server-solid" sx={{ color: 'text.disabled' }} />
+            {fData(item.size)}
+          </Box>
+        </Stack>
+      </div>
+    </Box>
+  );
+}
+function TopCategoriesItem({ item, sx, ...other }: ItemProps) {
+  return (
+    <Box sx={{ gap: 2, display: 'flex', alignItems: 'center', ...sx }} {...other}>
+      <Avatar
+        variant="rounded"
+        src={item.shortcut}
+        sx={{
+          p: 1,
+          width: 48,
+          height: 48,
+          bgcolor: 'background.neutral',
+        }}
+      />
+
+      <div>
+        <Box sx={{ mb: 1, gap: 1, display: 'flex', alignItems: 'center' }}>
+          <Typography variant="subtitle2" noWrap>
+            {item.name}
+          </Typography>
+
+          <Label color={item.price === 0 ? 'default' : 'success'} sx={{ height: 20 }}>
+            {item.price === 0 ? 'Free' : fCurrency(item.price)}
+          </Label>
+        </Box>
+
+        <Stack
+          spacing={1}
+          direction="row"
+          alignItems="center"
+          divider={
+            <Box sx={{ width: 4, height: 4, borderRadius: '50%', bgcolor: 'text.disabled' }} />
+          }
+          sx={{ typography: 'caption' }}
+        >
+          <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
+            <Iconify width={16} icon="solar:download-bold" sx={{ color: 'text.disabled' }} />
+            {fShortenNumber(item.downloaded)}
+          </Box>
+
+          <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
+            <Iconify width={16} icon="heroicons:server-solid" sx={{ color: 'text.disabled' }} />
+            {fData(item.size)}
+          </Box>
         </Stack>
       </div>
     </Box>

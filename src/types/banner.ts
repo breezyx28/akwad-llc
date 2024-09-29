@@ -2,20 +2,20 @@ import type { IDateValue, ISocialLink } from './common';
 
 // ----------------------------------------------------------------------
 
-export type IBrandTableFilters = {
+export type IBannerTableFilters = {
   name: string;
   filter: string[];
   status: string;
 };
 
-export type IBrandProfileCover = {
+export type IBannerProfileCover = {
   name: string;
   role: string;
   coverUrl: string;
   avatarUrl: string;
 };
 
-export type IBrandProfile = {
+export type IBannerProfile = {
   id: string;
   role: string;
   quote: string;
@@ -28,28 +28,28 @@ export type IBrandProfile = {
   socialLinks: ISocialLink;
 };
 
-export type IBrandProfileFollower = {
+export type IBannerProfileFollower = {
   id: string;
   name: string;
   country: string;
   avatarUrl: string;
 };
 
-export type IBrandProfileGallery = {
+export type IBannerProfileGallery = {
   id: string;
   title: string;
   imageUrl: string;
   postedAt: IDateValue;
 };
 
-export type IBrandProfileFriend = {
+export type IBannerProfileFriend = {
   id: string;
   name: string;
   role: string;
   avatarUrl: string;
 };
 
-export type IBrandProfilePost = {
+export type IBannerProfilePost = {
   id: string;
   media: string;
   message: string;
@@ -63,7 +63,7 @@ export type IBrandProfilePost = {
   }[];
 };
 
-export type IBrandCard = {
+export type IBannerCard = {
   id: string;
   name: string;
   role: string;
@@ -74,24 +74,7 @@ export type IBrandCard = {
   totalFollowing: number;
 };
 
-export type IBrandItem = {
-  id: string;
-  name: string;
-  city: string;
-  role: string;
-  email: string;
-  state: string;
-  status: string;
-  address: string;
-  country: string;
-  zipCode: string;
-  company: string;
-  avatarUrl: string;
-  phoneNumber: string;
-  isVerified: boolean;
-};
-
-export type IBrandAccount = {
+export type IBannerAccount = {
   city: string;
   email: string;
   state: string;
@@ -105,7 +88,7 @@ export type IBrandAccount = {
   photoURL: File | string | null;
 };
 
-export type IBrandAccountBillingHistory = {
+export type IBannerAccountBillingHistory = {
   id: string;
   price: number;
   invoiceNumber: string;

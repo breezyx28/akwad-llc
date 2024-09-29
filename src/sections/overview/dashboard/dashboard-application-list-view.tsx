@@ -45,30 +45,43 @@ import {
 
 import { UserTableRow } from './user-table-row';
 import { Stack, Typography } from '@mui/material';
+import { DashboardApplicationsTableRow } from './dashboard-applications-table-row';
+import { IApplicationItem, IApplicationTableFilters } from 'src/types/application';
+import { string } from 'zod';
+import { _applicationList } from 'src/_mock/_application';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
-  { id: 'status', label: 'Status', width: 100 },
+  { id: 'brand', label: 'Brand' },
+  { id: 'numberOfUsers', label: 'Number of users', width: 180 },
+  { id: 'numberOfDownloads', label: 'Number of downloads', width: 220 },
+  { id: 'numberOfSessions', label: 'Number of sessions', width: 220 },
+  { id: 'visits', label: 'Visits', width: 180 },
+  { id: 'usageProcesses', label: 'Usage processes', width: 100 },
   { id: '', width: 88 },
 ];
 
 // ----------------------------------------------------------------------
 
-export function UserListView() {
+export function DashboardApplicationsListView() {
   const table = useTable();
 
   const router = useRouter();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState<IUserItem[]>(_userList);
+  const [tableData, setTableData] = useState<IApplicationItem[]>(_applicationList);
 
-  const filters = useSetState<IUserTableFilters>({ name: '', role: [], status: 'all' });
+  const filters = useSetState<IApplicationTableFilters>({
+    brand: '',
+    numberOfUsers: 0,
+    avatarUrl: '',
+    numberOfDownloads: 0,
+    numberOfSessions: 0,
+    visits: 0,
+    usageProcesses: 0,
+  });
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -79,7 +92,12 @@ export function UserListView() {
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
   const canReset =
-    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
+    !!filters.state.brand ||
+    !!filters.state.numberOfDownloads ||
+    !!filters.state.numberOfUsers ||
+    !!filters.state.numberOfSessions ||
+    !!filters.state.usageProcesses ||
+    !!filters.state.visits;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -179,7 +197,7 @@ export function UserListView() {
                     table.page * table.rowsPerPage + table.rowsPerPage
                   )
                   .map((row) => (
-                    <UserTableRow
+                    <DashboardApplicationsTableRow
                       key={row.id}
                       row={row}
                       selected={table.selected.includes(row.id)}
@@ -240,13 +258,21 @@ export function UserListView() {
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: IUserItem[];
-  filters: IUserTableFilters;
+  inputData: IApplicationItem[];
+  filters: IApplicationTableFilters;
   comparator: (a: any, b: any) => number;
 };
 
 function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
-  const { name, status, role } = filters;
+  const {
+    brand,
+    numberOfDownloads,
+    numberOfSessions,
+    numberOfUsers,
+    usageProcesses,
+    visits,
+    avatarUrl,
+  } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -258,18 +284,30 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
 
   inputData = stabilizedThis.map((el) => el[0]);
 
-  if (name) {
+  if (brand) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (user) => user.brand.toLowerCase().indexOf(brand.toLowerCase()) !== -1
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
+  if (numberOfDownloads) {
+    inputData = inputData.filter(
+      (application) => application.numberOfDownloads === numberOfDownloads
+    );
   }
-
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+  if (numberOfSessions) {
+    inputData = inputData.filter(
+      (application) => application.numberOfSessions === numberOfSessions
+    );
+  }
+  if (numberOfUsers) {
+    inputData = inputData.filter((application) => application.numberOfUsers === numberOfUsers);
+  }
+  if (usageProcesses) {
+    inputData = inputData.filter((application) => application.usageProcesses === usageProcesses);
+  }
+  if (visits) {
+    inputData = inputData.filter((application) => application.visits === visits);
   }
 
   return inputData;
