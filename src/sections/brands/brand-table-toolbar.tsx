@@ -2,7 +2,7 @@ import type { IBrandTableFilters } from 'src/types/brand';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { UseSetStateReturn } from 'src/hooks/use-set-state';
 
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
@@ -18,6 +18,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { Iconify } from 'src/components/iconify';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
+import { ListSubheader } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ type Props = {
   onResetPage: () => void;
   filters: UseSetStateReturn<IBrandTableFilters>;
   options: {
-    filters: string[];
+    filters: Record<any, any>;
   };
 };
 
@@ -70,7 +71,7 @@ export function BrandTableToolbar({ filters, options, onResetPage }: Props) {
             inputProps={{ id: 'brand-filter-select-label' }}
             MenuProps={{ PaperProps: { sx: { maxHeight: 240 } } }}
           >
-            {options.filters.map((option) => (
+            {/* {options.filters.map((option) => (
               <MenuItem key={option} value={option}>
                 <Checkbox
                   disableRipple
@@ -79,7 +80,35 @@ export function BrandTableToolbar({ filters, options, onResetPage }: Props) {
                 />
                 {option}
               </MenuItem>
-            ))}
+            ))} */}
+
+            {options.filters.map((filterObject: any[]) =>
+              Object.entries(filterObject).map(([category, categoryOptions]) => (
+                <React.Fragment key={category}>
+                  {/* Use ListSubheader to display the category as a title */}
+                  <ListSubheader
+                    sx={{
+                      color: 'black',
+                      fontWeigh: '500',
+                      fontSize: '18px',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {category}
+                  </ListSubheader>
+                  {categoryOptions?.map((option: any) => (
+                    <MenuItem key={option} value={option}>
+                      <Checkbox
+                        disableRipple
+                        size="small"
+                        checked={filters.state.filter.includes(option)}
+                      />
+                      {option}
+                    </MenuItem>
+                  ))}
+                </React.Fragment>
+              ))
+            )}
           </Select>
         </FormControl>
 

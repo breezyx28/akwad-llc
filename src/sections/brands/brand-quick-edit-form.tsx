@@ -20,29 +20,16 @@ import { USER_STATUS_OPTIONS } from 'src/_mock';
 
 import { toast } from 'src/components/snackbar';
 import { Form, Field, schemaHelper } from 'src/components/hook-form';
+import { IBrandItem } from 'src/types/brand';
 
 // ----------------------------------------------------------------------
 
-export type UserQuickEditSchemaType = zod.infer<typeof UserQuickEditSchema>;
+export type BrandQuickEditSchemaType = zod.infer<typeof BrandQuickEditSchema>;
 
-export const UserQuickEditSchema = zod.object({
-  name: zod.string().min(1, { message: 'Name is required!' }),
-  email: zod
-    .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
-  phoneNumber: schemaHelper.phoneNumber({ isValidPhoneNumber }),
-  country: schemaHelper.objectOrNull<string | null>({
-    message: { required_error: 'Country is required!' },
-  }),
-  state: zod.string().min(1, { message: 'State is required!' }),
-  city: zod.string().min(1, { message: 'City is required!' }),
-  address: zod.string().min(1, { message: 'Address is required!' }),
-  zipCode: zod.string().min(1, { message: 'Zip code is required!' }),
-  company: zod.string().min(1, { message: 'Company is required!' }),
-  role: zod.string().min(1, { message: 'Role is required!' }),
-  // Not required
-  status: zod.string(),
+export const BrandQuickEditSchema = zod.object({
+  name: zod.string(),
+  description: zod.string(),
+  link: zod.string(),
 });
 
 // ----------------------------------------------------------------------
@@ -50,30 +37,22 @@ export const UserQuickEditSchema = zod.object({
 type Props = {
   open: boolean;
   onClose: () => void;
-  currentUser?: IUserItem;
+  currentBrand?: IBrandItem;
 };
 
-export function UserQuickEditForm({ currentUser, open, onClose }: Props) {
+export function BrandQuickEditForm({ currentBrand, open, onClose }: Props) {
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
-      status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.role || '',
+      name: currentBrand?.name || '',
+      description: currentBrand?.description || '',
+      link: currentBrand?.link || '',
     }),
-    [currentUser]
+    [currentBrand]
   );
 
-  const methods = useForm<UserQuickEditSchemaType>({
+  const methods = useForm<BrandQuickEditSchemaType>({
     mode: 'all',
-    resolver: zodResolver(UserQuickEditSchema),
+    resolver: zodResolver(BrandQuickEditSchema),
     defaultValues,
   });
 
@@ -136,23 +115,9 @@ export function UserQuickEditForm({ currentUser, open, onClose }: Props) {
 
             <Box sx={{ display: { xs: 'none', sm: 'block' } }} />
 
-            <Field.Text name="name" label="Full name" />
-            <Field.Text name="email" label="Email address" />
-            <Field.Phone name="phoneNumber" label="Phone number" />
-
-            <Field.CountrySelect
-              fullWidth
-              name="country"
-              label="Country"
-              placeholder="Choose a country"
-            />
-
-            <Field.Text name="state" label="State/region" />
-            <Field.Text name="city" label="City" />
-            <Field.Text name="address" label="Address" />
-            <Field.Text name="zipCode" label="Zip/code" />
-            <Field.Text name="company" label="Company" />
-            <Field.Text name="role" label="Role" />
+            <Field.Text name="name" label="Brand name" />
+            <Field.Text name="description" label="Description" />
+            <Field.Phone name="link" label="Link" />
           </Box>
         </DialogContent>
 

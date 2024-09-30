@@ -23,7 +23,7 @@ import { useSetState } from 'src/hooks/use-set-state';
 
 import { varAlpha } from 'src/theme/styles';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
+import { _brandFilter, _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
 
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
@@ -46,17 +46,20 @@ import {
 import { UserTableRow } from '../user-table-row';
 import { BrandTableToolbar } from '../brand-table-toolbar';
 import { BrandTableFiltersResult } from '../user-table-filters-result';
-import { IBrandTableFilters } from 'src/types/brand';
+import { IBrandItem, IBrandTableFilters } from 'src/types/brand';
+import { _brandList } from 'src/_mock/_brand';
+import { BrandTableRow } from '../brand-table-row';
 
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
+  { id: 'brand', label: 'Brand' },
+  { id: 'description', label: 'Description', width: 180 },
+  { id: 'websiteLink', label: 'Website link', width: 220 },
+  { id: 'applicationLink', label: 'Application link', width: 180 },
+  { id: 'visits', label: 'Visits', width: 180 },
   { id: 'status', label: 'Status', width: 100 },
   { id: '', width: 88 },
 ];
@@ -70,9 +73,14 @@ export function BrandListView() {
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState<IUserItem[]>(_userList);
+  const [tableData, setTableData] = useState<IBrandItem[]>(_brandList);
 
-  const filters = useSetState<IBrandTableFilters>({ name: '', filter: [], status: 'all' });
+  const filters = useSetState<IBrandTableFilters>({
+    name: '',
+    filter: [],
+    description: '',
+    status: false,
+  });
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -83,7 +91,7 @@ export function BrandListView() {
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
   const canReset =
-    !!filters.state.name || filters.state.filter.length > 0 || filters.state.status !== 'all';
+    !!filters.state.name || filters.state.filter.length > 0 || filters.state.status !== false;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -121,7 +129,7 @@ export function BrandListView() {
   );
 
   const handleFilterStatus = useCallback(
-    (event: React.SyntheticEvent, newValue: string) => {
+    (event: React.SyntheticEvent, newValue: boolean) => {
       table.onResetPage();
       filters.setState({ status: newValue });
     },
@@ -135,7 +143,7 @@ export function BrandListView() {
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'User', href: paths.dashboard.user.root },
+            { name: 'Brand', href: paths.dashboard.brand.root },
             { name: 'List' },
           ]}
           action={
@@ -155,7 +163,7 @@ export function BrandListView() {
           <BrandTableToolbar
             filters={filters}
             onResetPage={table.onResetPage}
-            options={{ filters: _roles }}
+            options={{ filters: _brandFilter }}
           />
 
           {canReset && (
@@ -211,7 +219,7 @@ export function BrandListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <UserTableRow
+                      <BrandTableRow
                         key={row.id}
                         row={row}
                         selected={table.selected.includes(row.id)}
@@ -273,13 +281,13 @@ export function BrandListView() {
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: IUserItem[];
+  inputData: IBrandItem[];
   filters: IBrandTableFilters;
   comparator: (a: any, b: any) => number;
 };
 
 function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
-  const { name, status, filter } = filters;
+  const { name, status, description, filter } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -293,17 +301,23 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
 
   if (name) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (brand) => brand.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
+  if (description) {
+    inputData = inputData.filter(
+      (brand) => brand.description.toLowerCase().indexOf(description.toLowerCase()) !== -1
+    );
   }
 
-  if (filter.length) {
-    inputData = inputData.filter((user) => filter.includes(user.role));
+  if (status) {
+    inputData = inputData.filter((brand) => brand.status === status);
   }
+
+  // if (filter.length) {
+  //   inputData = inputData.filter((brand) => filter.includes(brand.role));
+  // }
 
   return inputData;
 }

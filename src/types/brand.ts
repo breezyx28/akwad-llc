@@ -4,8 +4,10 @@ import type { IDateValue, ISocialLink } from './common';
 
 export type IBrandTableFilters = {
   name: string;
+  description: string;
   filter: string[];
-  status: string;
+  status: boolean;
+  [rest: string]: any | unknown;
 };
 
 export type IBrandProfileCover = {
@@ -77,18 +79,19 @@ export type IBrandCard = {
 export type IBrandItem = {
   id: string;
   name: string;
-  city: string;
-  role: string;
-  email: string;
-  state: string;
-  status: string;
-  address: string;
-  country: string;
-  zipCode: string;
-  company: string;
-  avatarUrl: string;
-  phoneNumber: string;
-  isVerified: boolean;
+  description: string;
+  websiteLink?: string;
+  applicationLink?: string;
+  visits: number;
+  category?: string;
+  status?: boolean;
+  link: string;
+  image?: string;
+  opend: boolean;
+  created_at?: string;
+  updated_at?: string;
+  codes?: any[];
+  [rest: string]: any | unknown;
 };
 
 export type IBrandAccount = {

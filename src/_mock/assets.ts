@@ -326,6 +326,17 @@ export const _roles = [
   `Training Coordinator`,
 ];
 
+export const _brandFilter = [
+  {
+    applications: [`Awan Company`, `Fintech Company`, `Amndas Company`],
+  },
+  {
+    categories: [`Restaurants 🍔`, `Shopping 🛍️`, `Stores 🛒`, `Electronics 🖥️ `],
+  },
+  {
+    status: [`Active ✅`, `Inactive 😴`],
+  },
+];
 // ----------------------------------------------------------------------
 
 export const _postTitles = [
