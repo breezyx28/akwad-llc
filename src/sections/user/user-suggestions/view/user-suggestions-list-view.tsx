@@ -44,8 +44,6 @@ import {
 } from 'src/components/table';
 
 import { UserTableRow } from '../user-table-row';
-import { DiscountTableToolbar } from '../user-suggestions-table-toolbar';
-import { DiscountCodesTableFiltersResult } from '../user-suggestions-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -135,37 +133,23 @@ export function DiscountCodesListView() {
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
             { name: 'User', href: paths.dashboard.user.root },
-            { name: 'List' },
+            { name: 'User Suggestions' },
           ]}
           action={
             <Button
               component={RouterLink}
               href={paths.dashboard.user.new}
               variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
+              color="secondary"
+              startIcon={<Iconify icon="solar:calendar-mark-bold-duotone" />}
             >
-              New user
+              This month
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
         <Card>
-          <DiscountTableToolbar
-            filters={filters}
-            onResetPage={table.onResetPage}
-            options={{ roles: _roles }}
-          />
-
-          {canReset && (
-            <DiscountCodesTableFiltersResult
-              filters={filters}
-              totalResults={dataFiltered.length}
-              onResetPage={table.onResetPage}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
-
           <Box sx={{ position: 'relative' }}>
             <TableSelectedAction
               dense={table.dense}

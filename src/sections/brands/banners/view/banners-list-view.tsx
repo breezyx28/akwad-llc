@@ -16,7 +16,6 @@ import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
@@ -43,20 +42,17 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { UserTableRow } from '../user-table-row';
-import { BannersTableToolbar } from '../banners-table-toolbar';
-import { BannersTableFiltersResult } from '../banners-table-filters-result';
+import { BannerTableRow } from '../banner-table-row';
+import { AddBannerFormDialog } from '../add-banner-form-dialog';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
-
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
-  { id: 'status', label: 'Status', width: 100 },
+  { id: 'brand', label: 'Brand' },
+  { id: 'type', label: 'Type', width: 180 },
+  { id: 'websiteLink', label: 'Website link', width: 220 },
+  { id: 'usage', label: 'Usage', width: 180 },
+  { id: 'expiryDate', label: 'Expiry DAte', width: 100 },
   { id: '', width: 88 },
 ];
 
@@ -134,38 +130,14 @@ export function BannersListView() {
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'User', href: paths.dashboard.user.root },
-            { name: 'List' },
+            { name: 'Brand', href: paths.dashboard.brand.root },
+            { name: 'Banner' },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.dashboard.user.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New user
-            </Button>
-          }
+          action={<AddBannerFormDialog />}
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
         <Card>
-          <BannersTableToolbar
-            filters={filters}
-            onResetPage={table.onResetPage}
-            options={{ roles: _roles }}
-          />
-
-          {canReset && (
-            <BannersTableFiltersResult
-              filters={filters}
-              totalResults={dataFiltered.length}
-              onResetPage={table.onResetPage}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
-
           <Box sx={{ position: 'relative' }}>
             <TableSelectedAction
               dense={table.dense}
@@ -210,7 +182,7 @@ export function BannersListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <UserTableRow
+                      <BannerTableRow
                         key={row.id}
                         row={row}
                         selected={table.selected.includes(row.id)}

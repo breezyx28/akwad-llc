@@ -32,7 +32,9 @@ type Props = {
   onDeleteRow: () => void;
 };
 
-export function UserTableRow({ row, selected, onEditRow, onSelectRow }: Props) {
+export function BannerTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }: Props) {
+  const confirm = useBoolean();
+
   const popover = usePopover();
 
   const quickEdit = useBoolean();
@@ -81,17 +83,65 @@ export function UserTableRow({ row, selected, onEditRow, onSelectRow }: Props) {
 
         <TableCell>
           <Stack direction="row" alignItems="center">
-            <IconButton
-              color={popover.open ? 'inherit' : 'default'}
-              onClick={popover.open ? popover.onClose : popover.onOpen}
-            >
-              <Iconify icon="mdi:eye" />
+            <Tooltip title="Quick Edit" placement="top" arrow>
+              <IconButton
+                color={quickEdit.value ? 'inherit' : 'default'}
+                onClick={quickEdit.onTrue}
+              >
+                <Iconify icon="solar:pen-bold" />
+              </IconButton>
+            </Tooltip>
+
+            <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
+              <Iconify icon="eva:more-vertical-fill" />
             </IconButton>
           </Stack>
         </TableCell>
       </TableRow>
 
       <UserQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
+
+      <CustomPopover
+        open={popover.open}
+        anchorEl={popover.anchorEl}
+        onClose={popover.onClose}
+        slotProps={{ arrow: { placement: 'right-top' } }}
+      >
+        <MenuList>
+          <MenuItem
+            onClick={() => {
+              confirm.onTrue();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="solar:trash-bin-trash-bold" />
+            Delete
+          </MenuItem>
+
+          <MenuItem
+            onClick={() => {
+              onEditRow();
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="solar:pen-bold" />
+            Edit
+          </MenuItem>
+        </MenuList>
+      </CustomPopover>
+
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content="Are you sure want to delete?"
+        action={
+          <Button variant="contained" color="error" onClick={onDeleteRow}>
+            Delete
+          </Button>
+        }
+      />
     </>
   );
 }

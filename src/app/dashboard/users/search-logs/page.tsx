@@ -1,10 +1,10 @@
 import { CONFIG } from 'src/config-global';
-import { DiscountCodesListView } from 'src/sections/brands/discount-codes/view';
+import { SearchLogsListView } from 'src/sections/users/search-logs/view/search-logs-list-view';
 
 // ----------------------------------------------------------------------
 
-export const metadata = { title: `Brand Discount Codes | Dashboard - ${CONFIG.site.name}` };
+export const metadata = { title: `Users - Search Logs | Dashboard - ${CONFIG.site.name}` };
 
 export default function Page() {
-  return <DiscountCodesListView />;
+  return <SearchLogsListView />;
 }

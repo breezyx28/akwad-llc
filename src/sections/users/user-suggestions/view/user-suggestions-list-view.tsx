@@ -43,9 +43,7 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { UserTableRow } from '../user-table-row';
-import { UserTableToolbar } from '../user-table-toolbar';
-import { UserTableFiltersResult } from '../user-table-filters-result';
+import { UserSuggestionsTableRow } from '../user-suggestions-table-row';
 
 // ----------------------------------------------------------------------
 
@@ -62,7 +60,7 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 
-export function UserListView() {
+export function UserSuggestionsListView() {
   const table = useTable();
 
   const router = useRouter();
@@ -119,6 +117,14 @@ export function UserListView() {
     [router]
   );
 
+  const handleFilterStatus = useCallback(
+    (event: React.SyntheticEvent, newValue: string) => {
+      table.onResetPage();
+      filters.setState({ status: newValue });
+    },
+    [filters, table]
+  );
+
   return (
     <>
       <DashboardContent>
@@ -126,17 +132,18 @@ export function UserListView() {
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'User', href: paths.dashboard.user.root },
-            { name: 'List' },
+            { name: 'Users', href: paths.dashboard.users.root },
+            { name: 'User Suggestions' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={'#'}
+              href={paths.dashboard.user.new}
               variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
+              color="secondary"
+              startIcon={<Iconify icon="solar:calendar-mark-bold-duotone" />}
             >
-              New user
+              This month
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}
@@ -187,7 +194,7 @@ export function UserListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <UserTableRow
+                      <UserSuggestionsTableRow
                         key={row.id}
                         row={row}
                         selected={table.selected.includes(row.id)}

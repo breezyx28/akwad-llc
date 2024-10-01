@@ -62,13 +62,16 @@ export const navData = [
           { title: 'Banners', path: paths.dashboard.brand.banners },
         ],
       },
-      { title: 'Users', path: paths.dashboard.user.root, icon: ICONS.user,
+      {
+        title: 'Users',
+        path: paths.dashboard.users.list,
+        icon: ICONS.user,
         children: [
-          { title: 'List', path: paths.dashboard.user.root },
-          { title: 'User Suggestions', path: paths.dashboard.user.suggestions },
-          { title: 'Search Logs', path: paths.dashboard.user.searchLogs },
+          { title: 'List', path: paths.dashboard.users.root },
+          { title: 'User Suggestions', path: paths.dashboard.users.suggestions },
+          { title: 'Search Logs', path: paths.dashboard.users.searchLogs },
         ],
-       },
+      },
       { title: 'Ecommerce', path: paths.dashboard.general.ecommerce, icon: ICONS.ecommerce },
       { title: 'Analytics', path: paths.dashboard.general.analytics, icon: ICONS.analytics },
       { title: 'Banking', path: paths.dashboard.general.banking, icon: ICONS.banking },
@@ -83,19 +86,19 @@ export const navData = [
   {
     subheader: 'Management',
     items: [
-      {
-        title: 'User',
-        path: paths.dashboard.user.root,
-        icon: ICONS.user,
-        children: [
-          { title: 'Profile', path: paths.dashboard.user.root },
-          { title: 'Cards', path: paths.dashboard.user.cards },
-          { title: 'List', path: paths.dashboard.user.list },
-          { title: 'Create', path: paths.dashboard.user.new },
-          { title: 'Edit', path: paths.dashboard.user.demo.edit },
-          { title: 'Account', path: paths.dashboard.user.account },
-        ],
-      },
+      // {
+      //   title: 'User',
+      //   path: paths.dashboard.user.root,
+      //   icon: ICONS.user,
+      //   children: [
+      //     { title: 'Profile', path: paths.dashboard.user.root },
+      //     { title: 'Cards', path: paths.dashboard.user.cards },
+      //     { title: 'List', path: paths.dashboard.user.list },
+      //     { title: 'Create', path: paths.dashboard.user.new },
+      //     { title: 'Edit', path: paths.dashboard.user.demo.edit },
+      //     { title: 'Account', path: paths.dashboard.user.account },
+      //   ],
+      // },
       {
         title: 'Product',
         path: paths.dashboard.product.root,

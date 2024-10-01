@@ -49,6 +49,7 @@ import { BrandTableFiltersResult } from '../user-table-filters-result';
 import { IBrandItem, IBrandTableFilters } from 'src/types/brand';
 import { _brandList } from 'src/_mock/_brand';
 import { BrandTableRow } from '../brand-table-row';
+import { AddBrandFormDialog } from '../add-brand-form-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -146,16 +147,7 @@ export function BrandListView() {
             { name: 'Brand', href: paths.dashboard.brand.root },
             { name: 'List' },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.dashboard.user.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Brand
-            </Button>
-          }
+          action={<AddBrandFormDialog />}
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 

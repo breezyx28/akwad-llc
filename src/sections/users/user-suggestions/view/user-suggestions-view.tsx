@@ -5,8 +5,6 @@ import type { IUserItem, IUserTableFilters } from 'src/types/user';
 import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
@@ -43,26 +41,20 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { UserTableRow } from '../user-table-row';
-import { UserTableToolbar } from '../user-table-toolbar';
-import { UserTableFiltersResult } from '../user-table-filters-result';
+import { UserSuggestionsTableRow } from '../user-suggestions-table-row';
 
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
-  { id: 'status', label: 'Status', width: 100 },
-  { id: '', width: 88 },
+  { id: 'brand', label: 'Brand', width: 120 },
+  { id: 'noOfSuggestions', label: 'No. Of Suggestions' },
 ];
 
 // ----------------------------------------------------------------------
 
-export function UserListView() {
+export function UserSuggestionsListView() {
   const table = useTable();
 
   const router = useRouter();
@@ -123,20 +115,20 @@ export function UserListView() {
     <>
       <DashboardContent>
         <CustomBreadcrumbs
-          heading="List"
+          heading="User Suggestions"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'User', href: paths.dashboard.user.root },
-            { name: 'List' },
+            { name: 'Users', href: paths.dashboard.user.root },
+            { name: 'User Suggestions' },
           ]}
           action={
             <Button
               component={RouterLink}
               href={'#'}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
+              variant="soft"
+              endIcon={<Iconify icon="solar:calendar-mark-bold-duotone" />}
             >
-              New user
+              This month
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}
@@ -187,7 +179,7 @@ export function UserListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <UserTableRow
+                      <UserSuggestionsTableRow
                         key={row.id}
                         row={row}
                         selected={table.selected.includes(row.id)}

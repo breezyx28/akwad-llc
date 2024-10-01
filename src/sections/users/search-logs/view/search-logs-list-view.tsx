@@ -43,26 +43,20 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { UserTableRow } from '../user-table-row';
-import { UserTableToolbar } from '../user-table-toolbar';
-import { UserTableFiltersResult } from '../user-table-filters-result';
+import { SearchLogsTableRow } from '../search-logs-table-row';
 
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
-  { id: 'status', label: 'Status', width: 100 },
-  { id: '', width: 88 },
+  { id: 'theWord', label: 'The Word', width: 180 },
+  { id: 'numberOf', label: 'No. Of ' },
 ];
 
 // ----------------------------------------------------------------------
 
-export function UserListView() {
+export function SearchLogsListView() {
   const table = useTable();
 
   const router = useRouter();
@@ -99,19 +93,6 @@ export function UserListView() {
     [dataInPage.length, table, tableData]
   );
 
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-
-    toast.success('Delete success!');
-
-    setTableData(deleteRows);
-
-    table.onUpdatePageDeleteRows({
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
-
   const handleEditRow = useCallback(
     (id: string) => {
       router.push(paths.dashboard.user.edit(id));
@@ -123,20 +104,20 @@ export function UserListView() {
     <>
       <DashboardContent>
         <CustomBreadcrumbs
-          heading="List"
+          heading="Search Logs"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'User', href: paths.dashboard.user.root },
-            { name: 'List' },
+            { name: 'User', href: paths.dashboard.users.root },
+            { name: 'Search Logs' },
           ]}
           action={
             <Button
               component={RouterLink}
               href={'#'}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
+              variant="soft"
+              endIcon={<Iconify icon="solar:calendar-mark-bold-duotone" />}
             >
-              New user
+              This month
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}
@@ -187,7 +168,7 @@ export function UserListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <UserTableRow
+                      <SearchLogsTableRow
                         key={row.id}
                         row={row}
                         selected={table.selected.includes(row.id)}
@@ -219,29 +200,6 @@ export function UserListView() {
           />
         </Card>
       </DashboardContent>
-
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows();
-              confirm.onFalse();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
     </>
   );
 }

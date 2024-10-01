@@ -1,11 +1,11 @@
 import { CONFIG } from 'src/config-global';
 
-import { UserProfileView } from 'src/sections/user/view';
+import { UserListView } from 'src/sections/users/view';
 
 // ----------------------------------------------------------------------
 
 export const metadata = { title: `User profile | Dashboard - ${CONFIG.site.name}` };
 
 export default function Page() {
-  return <UserProfileView />;
+  return <UserListView />;
 }

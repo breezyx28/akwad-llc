@@ -43,9 +43,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { UserTableRow } from '../user-table-row';
-import { UserTableToolbar } from '../user-table-toolbar';
-import { UserTableFiltersResult } from '../user-table-filters-result';
+import { SearchLogsTableRow } from '../search-logs-table-row';
+import { SearchLogsTableToolbar } from '../search-logs-table-toolbar';
+import { BrandTableFiltersResult } from '../search-logs-table-filters-result';
+import { IBrandTableFilters } from 'src/types/brand';
 
 // ----------------------------------------------------------------------
 
@@ -62,7 +63,7 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 
-export function UserListView() {
+export function BrandListView() {
   const table = useTable();
 
   const router = useRouter();
@@ -71,7 +72,7 @@ export function UserListView() {
 
   const [tableData, setTableData] = useState<IUserItem[]>(_userList);
 
-  const filters = useSetState<IUserTableFilters>({ name: '', role: [], status: 'all' });
+  const filters = useSetState<IBrandTableFilters>({ name: '', filter: [], status: 'all' });
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -82,7 +83,7 @@ export function UserListView() {
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
   const canReset =
-    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
+    !!filters.state.name || filters.state.filter.length > 0 || filters.state.status !== 'all';
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -119,6 +120,14 @@ export function UserListView() {
     [router]
   );
 
+  const handleFilterStatus = useCallback(
+    (event: React.SyntheticEvent, newValue: string) => {
+      table.onResetPage();
+      filters.setState({ status: newValue });
+    },
+    [filters, table]
+  );
+
   return (
     <>
       <DashboardContent>
@@ -132,17 +141,32 @@ export function UserListView() {
           action={
             <Button
               component={RouterLink}
-              href={'#'}
+              href={paths.dashboard.user.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New user
+              New Brand
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
         <Card>
+          <SearchLogsTableToolbar
+            filters={filters}
+            onResetPage={table.onResetPage}
+            options={{ filters: _roles }}
+          />
+
+          {canReset && (
+            <BrandTableFiltersResult
+              filters={filters}
+              totalResults={dataFiltered.length}
+              onResetPage={table.onResetPage}
+              sx={{ p: 2.5, pt: 0 }}
+            />
+          )}
+
           <Box sx={{ position: 'relative' }}>
             <TableSelectedAction
               dense={table.dense}
@@ -187,7 +211,7 @@ export function UserListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <UserTableRow
+                      <SearchLogsTableRow
                         key={row.id}
                         row={row}
                         selected={table.selected.includes(row.id)}
@@ -250,12 +274,12 @@ export function UserListView() {
 
 type ApplyFilterProps = {
   inputData: IUserItem[];
-  filters: IUserTableFilters;
+  filters: IBrandTableFilters;
   comparator: (a: any, b: any) => number;
 };
 
 function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
-  const { name, status, role } = filters;
+  const { name, status, filter } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -277,8 +301,8 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
     inputData = inputData.filter((user) => user.status === status);
   }
 
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+  if (filter.length) {
+    inputData = inputData.filter((user) => filter.includes(user.role));
   }
 
   return inputData;
