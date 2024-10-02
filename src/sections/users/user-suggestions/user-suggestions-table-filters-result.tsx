@@ -17,12 +17,7 @@ type Props = {
   filters: UseSetStateReturn<IUserTableFilters>;
 };
 
-export function UserSuggestionsTableFiltersResult({
-  filters,
-  onResetPage,
-  totalResults,
-  sx,
-}: Props) {
+export function DiscountCodesTableFiltersResult({ filters, onResetPage, totalResults, sx }: Props) {
   const handleRemoveKeyword = useCallback(() => {
     onResetPage();
     filters.setState({ name: '' });

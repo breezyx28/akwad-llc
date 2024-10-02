@@ -11,11 +11,11 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { Iconify } from 'src/components/iconify';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 
-import { UserCardList } from '../user-card-list';
+import { UserSuggestionsCardList } from '../user-suggestions-card-list';
 
 // ----------------------------------------------------------------------
 
-export function UserCardsView() {
+export function UserSuggestionsCardsView() {
   return (
     <DashboardContent>
       <CustomBreadcrumbs
@@ -38,7 +38,7 @@ export function UserCardsView() {
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      <UserCardList users={_userCards} />
+      <UserSuggestionsCardList users={_userCards} />
     </DashboardContent>
   );
 }

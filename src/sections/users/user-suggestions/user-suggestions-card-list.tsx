@@ -5,7 +5,7 @@ import { useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Pagination from '@mui/material/Pagination';
 
-import { UserCard } from './user-card';
+import { UserCard } from './user-suggestions-card';
 
 // ----------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ type Props = {
   users: IUserCard[];
 };
 
-export function UserCardList({ users }: Props) {
+export function UserSuggestionsCardList({ users }: Props) {
   const [page, setPage] = useState(1);
 
   const rowsPerPage = 12;

@@ -2,7 +2,7 @@
 
 import type { IUserItem, IUserTableFilters } from 'src/types/user';
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -21,15 +21,11 @@ import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
-import { varAlpha } from 'src/theme/styles';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
 
-import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -44,104 +40,64 @@ import {
 } from 'src/components/table';
 
 import { UserSuggestionsTableRow } from '../user-suggestions-table-row';
+import { useGetUserSuggestions } from 'src/actions/user-suggestions';
+import { IUserSuggestionsItem, IUserSuggestionsTableFilters } from 'src/types/user-suggestions';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
-
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
-  { id: 'status', label: 'Status', width: 100 },
-  { id: '', width: 88 },
+  { id: 'brand', label: 'Brand', width: 180 },
+  { id: 'numberOfSuggestions', label: 'No. Of Suggestions' },
 ];
 
 // ----------------------------------------------------------------------
 
 export function UserSuggestionsListView() {
-  const table = useTable();
+  const { userSuggestions } = useGetUserSuggestions();
 
-  const router = useRouter();
+  console.log('user-suggestions-data: ', userSuggestions);
+
+  const table = useTable();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState<IUserItem[]>(_userList);
+  const [tableData, setTableData] = useState<IUserSuggestionsItem[]>([]);
 
-  const filters = useSetState<IUserTableFilters>({ name: '', role: [], status: 'all' });
+  const filters = useSetState<IUserSuggestionsTableFilters>({ name: '', count: 0 });
 
+  // -------------------------------------
+  // set data when ready
+  React.useEffect(() => {
+    if (userSuggestions?.length > 0) {
+      setTableData(userSuggestions);
+    }
+  }, [userSuggestions]);
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters: filters.state,
   });
 
-  const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
-
-  const canReset =
-    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
+  const canReset = !!filters.state.name || !!filters.state.count;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-
-  const handleDeleteRow = useCallback(
-    (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-
-      toast.success('Delete success!');
-
-      setTableData(deleteRow);
-
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, tableData]
-  );
-
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-
-    toast.success('Delete success!');
-
-    setTableData(deleteRows);
-
-    table.onUpdatePageDeleteRows({
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
-
-  const handleEditRow = useCallback(
-    (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
-    },
-    [router]
-  );
-
-  const handleFilterStatus = useCallback(
-    (event: React.SyntheticEvent, newValue: string) => {
-      table.onResetPage();
-      filters.setState({ status: newValue });
-    },
-    [filters, table]
-  );
 
   return (
     <>
       <DashboardContent>
         <CustomBreadcrumbs
-          heading="List"
+          heading="User Suggestions"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'Users', href: paths.dashboard.users.root },
+            { name: 'User', href: paths.dashboard.users.root },
             { name: 'User Suggestions' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.dashboard.user.new}
-              variant="contained"
-              color="secondary"
-              startIcon={<Iconify icon="solar:calendar-mark-bold-duotone" />}
+              href={'#'}
+              variant="soft"
+              endIcon={<Iconify icon="solar:calendar-mark-bold-duotone" />}
             >
               This month
             </Button>
@@ -158,7 +114,7 @@ export function UserSuggestionsListView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row.id)
+                  dataFiltered.map((row) => row.name)
                 )
               }
               action={
@@ -182,7 +138,7 @@ export function UserSuggestionsListView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row.id)
+                      dataFiltered.map((row) => row.name)
                     )
                   }
                 />
@@ -195,12 +151,10 @@ export function UserSuggestionsListView() {
                     )
                     .map((row) => (
                       <UserSuggestionsTableRow
-                        key={row.id}
+                        key={row.name}
                         row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
+                        selected={table.selected.includes(row.name)}
+                        onSelectRow={() => table.onSelectRow(row.name)}
                       />
                     ))}
 
@@ -226,29 +180,6 @@ export function UserSuggestionsListView() {
           />
         </Card>
       </DashboardContent>
-
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows();
-              confirm.onFalse();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
     </>
   );
 }
@@ -256,13 +187,13 @@ export function UserSuggestionsListView() {
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: IUserItem[];
-  filters: IUserTableFilters;
+  inputData: IUserSuggestionsItem[];
+  filters: IUserSuggestionsTableFilters;
   comparator: (a: any, b: any) => number;
 };
 
 function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
-  const { name, status, role } = filters;
+  const { name, count } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -276,16 +207,12 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
 
   if (name) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (userSuggestions) => userSuggestions.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
-  }
-
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+  if (count) {
+    inputData = inputData.filter((userSuggestions) => userSuggestions.count === count);
   }
 
   return inputData;

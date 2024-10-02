@@ -29,7 +29,7 @@ type Props = {
   };
 };
 
-export function UserSuggestionsTableToolbar({ filters, options, onResetPage }: Props) {
+export function SearchLogsTableToolbar({ filters, options, onResetPage }: Props) {
   const popover = usePopover();
 
   const handleFilterName = useCallback(

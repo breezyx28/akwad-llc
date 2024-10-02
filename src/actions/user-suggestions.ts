@@ -3,7 +3,8 @@ import type { IPostItem } from 'src/types/blog';
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
-import { fetcher, endpoints } from 'src/utils/axios';
+import { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
+import { IUserSuggestionsItem } from 'src/types/user-suggestions';
 
 // ----------------------------------------------------------------------
 
@@ -15,24 +16,28 @@ const swrOptions = {
 
 // ----------------------------------------------------------------------
 
-type PostsData = {
-  posts: IPostItem[];
+type UserSuggestionsData = {
+  data: IUserSuggestionsItem[];
 };
 
-export function useGetPosts() {
-  const url = endpoints.post.list;
+export function useGetUserSuggestions() {
+  const url = endpoints.users.suggestions.list;
 
-  const { data, isLoading, error, isValidating } = useSWR<PostsData>(url, fetcher, swrOptions);
+  const { data, isLoading, error, isValidating } = useSWR<UserSuggestionsData>(
+    url,
+    authedFetcher,
+    swrOptions
+  );
 
   const memoizedValue = useMemo(
     () => ({
-      posts: data?.posts || [],
-      postsLoading: isLoading,
-      postsError: error,
-      postsValidating: isValidating,
-      postsEmpty: !isLoading && !data?.posts.length,
+      userSuggestions: data?.data || [],
+      userSuggestionsLoading: isLoading,
+      userSuggestionsError: error,
+      userSuggestionsValidating: isValidating,
+      userSuggestionsEmpty: !isLoading && !data?.data?.length,
     }),
-    [data?.posts, error, isLoading, isValidating]
+    [data?.data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
