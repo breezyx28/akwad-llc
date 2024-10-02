@@ -41,6 +41,16 @@ export async function setSession(accessToken: string | null) {
   }
 }
 
+export function getAccessToken(): string | null {
+  try {
+    const accessToken = sessionStorage.getItem(STORAGE_KEY);
+    return accessToken;
+  } catch (error) {
+    console.error('Error retrieving access token:', error);
+    return null;
+  }
+}
+
 // ----------------------------------------------------------------------
 // Function to check if the Sanctum token is valid by calling a protected route
 export async function isValidToken(): Promise<boolean> {

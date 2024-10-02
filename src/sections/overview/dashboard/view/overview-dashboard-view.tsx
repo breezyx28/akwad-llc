@@ -31,6 +31,7 @@ import { Iconify } from 'src/components/iconify';
 import { UserListView } from '../user-list-view';
 import { DashboardTopPerformance } from '../dashboard-top-performance';
 import { DashboardApplicationsListView } from '../dashboard-application-list-view';
+import { TotalIntallsOverview } from '../total-installs-overview';
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +74,7 @@ export function OverviewDashboardView() {
             icon={
               <img
                 alt="icon"
-                src={`${CONFIG.site.basePath}/assets/icons/glass/ic-glass-users.svg`}
+                src={`${CONFIG.site.basePath}/assets/icons/glass/ic-glass-unique-users.svg`}
               />
             }
             chart={{
@@ -85,12 +86,15 @@ export function OverviewDashboardView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Purchase orders"
+            title="Total Registred Users"
             percent={2.8}
             total={1723315}
             color="warning"
             icon={
-              <img alt="icon" src={`${CONFIG.site.basePath}/assets/icons/glass/ic-glass-buy.svg`} />
+              <img
+                alt="icon"
+                src={`${CONFIG.site.basePath}/assets/icons/glass/ic-glass-registered-users.svg`}
+              />
             }
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
@@ -101,7 +105,7 @@ export function OverviewDashboardView() {
 
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
-            title="Messages"
+            title="Total Installs"
             percent={3.6}
             total={234}
             color="error"
@@ -117,7 +121,7 @@ export function OverviewDashboardView() {
 
         <Grid xs={12} md={7} lg={8}>
           <Box sx={{ gap: 3, display: 'flex', flexDirection: 'column' }}>
-            <BankingOverview />
+            <TotalIntallsOverview />
           </Box>
         </Grid>
 

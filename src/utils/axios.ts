@@ -1,6 +1,7 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import axios from 'axios';
+import { getAccessToken } from 'src/auth/context/sanctum';
 
 import { CONFIG } from 'src/config-global';
 
@@ -22,6 +23,29 @@ export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
     const [url, config] = Array.isArray(args) ? args : [args];
 
     const res = await axiosInstance.get(url, { ...config });
+
+    return res.data;
+  } catch (error) {
+    console.error('Failed to fetch:', error);
+    throw error;
+  }
+};
+
+export const authedFetcher = async (args: string | [string, AxiosRequestConfig]) => {
+  try {
+    const [url, config] = Array.isArray(args) ? args : [args];
+
+    // Add the Authorization header to the config, if not already present
+    const token = getAccessToken(); // Replace with your token or retrieve it dynamically
+    const authConfig = {
+      ...config,
+      headers: {
+        ...config?.headers,
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const res = await axiosInstance.get(url, authConfig);
 
     return res.data;
   } catch (error) {

@@ -24,6 +24,14 @@ export const _appRelated = [
   price: [2, 4].includes(index) ? _mock.number.price(index) : 0,
 }));
 
+export const _topSearch = ['Aliexpress', 'Namshi', 'The Chefz', 'Trendyol', 'Nana'].map(
+  (name, index) => ({
+    id: Number(index + 1),
+    name,
+    count: _mock.number.nativeL(index),
+  })
+);
+
 export const _appInstalled = ['Germany', 'England', 'France', 'Korean', 'USA'].map(
   (country, index) => ({
     id: _mock.id(index),

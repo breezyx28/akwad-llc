@@ -2,7 +2,7 @@
 
 import type { IUserItem, IUserTableFilters } from 'src/types/user';
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -21,15 +21,11 @@ import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
-import { varAlpha } from 'src/theme/styles';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
 
-import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -44,10 +40,10 @@ import {
 } from 'src/components/table';
 
 import { SearchLogsTableRow } from '../search-logs-table-row';
+import { ISearchLogsItem, ISearchLogsTableFilters } from 'src/types/search-logs';
+import { useGetSearchLogs } from 'src/actions/search-logs';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   { id: 'theWord', label: 'The Word', width: 180 },
@@ -57,48 +53,34 @@ const TABLE_HEAD = [
 // ----------------------------------------------------------------------
 
 export function SearchLogsListView() {
-  const table = useTable();
+  const { searchLogs, searchLogsLoading } = useGetSearchLogs();
 
-  const router = useRouter();
+  console.log('search-logs-data: ', searchLogs);
+
+  const table = useTable();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState<IUserItem[]>(_userList);
+  const [tableData, setTableData] = useState<ISearchLogsItem[]>([]);
 
-  const filters = useSetState<IUserTableFilters>({ name: '', role: [], status: 'all' });
+  const filters = useSetState<ISearchLogsTableFilters>({ name: '', count: 0 });
 
+  // -------------------------------------
+  // set data when ready
+  React.useEffect(() => {
+    if (searchLogs?.length > 0) {
+      setTableData(searchLogs);
+    }
+  }, [searchLogs]);
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters: filters.state,
   });
 
-  const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
-
-  const canReset =
-    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
+  const canReset = !!filters.state.name || !!filters.state.count;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-
-  const handleDeleteRow = useCallback(
-    (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-
-      toast.success('Delete success!');
-
-      setTableData(deleteRow);
-
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, tableData]
-  );
-
-  const handleEditRow = useCallback(
-    (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
-    },
-    [router]
-  );
 
   return (
     <>
@@ -132,7 +114,7 @@ export function SearchLogsListView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row.id)
+                  dataFiltered.map((row) => row.name)
                 )
               }
               action={
@@ -156,7 +138,7 @@ export function SearchLogsListView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row.id)
+                      dataFiltered.map((row) => row.name)
                     )
                   }
                 />
@@ -169,12 +151,10 @@ export function SearchLogsListView() {
                     )
                     .map((row) => (
                       <SearchLogsTableRow
-                        key={row.id}
+                        key={row.name}
                         row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
+                        selected={table.selected.includes(row.name)}
+                        onSelectRow={() => table.onSelectRow(row.name)}
                       />
                     ))}
 
@@ -207,13 +187,13 @@ export function SearchLogsListView() {
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: IUserItem[];
-  filters: IUserTableFilters;
+  inputData: ISearchLogsItem[];
+  filters: ISearchLogsTableFilters;
   comparator: (a: any, b: any) => number;
 };
 
 function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
-  const { name, status, role } = filters;
+  const { name, count } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -227,16 +207,12 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
 
   if (name) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (searchLog) => searchLog.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
-  }
-
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+  if (count) {
+    inputData = inputData.filter((searchLog) => searchLog.count === count);
   }
 
   return inputData;

@@ -1,30 +1,27 @@
-import type { IUserItem } from 'src/types/user';
-
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
+import { ISearchLogsItem } from 'src/types/search-logs';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IUserItem;
+  row: ISearchLogsItem;
   selected: boolean;
-  onEditRow: () => void;
   onSelectRow: () => void;
-  onDeleteRow: () => void;
 };
 
-export function SearchLogsTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }: Props) {
+export function SearchLogsTableRow({ row, selected, onSelectRow }: Props) {
   return (
     <>
       <TableRow hover selected={selected} aria-checked={selected} tabIndex={-1}>
         <TableCell padding="checkbox">
-          <Checkbox id={row.id} checked={selected} onClick={onSelectRow} />
+          <Checkbox id={row.name} checked={selected} onClick={onSelectRow} />
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.name}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.company}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.count}</TableCell>
       </TableRow>
     </>
   );
