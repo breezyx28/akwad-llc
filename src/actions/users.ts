@@ -3,7 +3,8 @@ import type { IPostItem } from 'src/types/blog';
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
-import { fetcher, endpoints } from 'src/utils/axios';
+import { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
+import { IUsersItem } from 'src/types/users';
 
 // ----------------------------------------------------------------------
 
@@ -15,24 +16,28 @@ const swrOptions = {
 
 // ----------------------------------------------------------------------
 
-type PostsData = {
-  posts: IPostItem[];
+type UsersData = {
+  data: IUsersItem[];
 };
 
-export function useGetPosts() {
-  const url = endpoints.post.list;
+export function useGetUsers() {
+  const url = endpoints.users.list;
 
-  const { data, isLoading, error, isValidating } = useSWR<PostsData>(url, fetcher, swrOptions);
+  const { data, isLoading, error, isValidating } = useSWR<UsersData>(
+    url,
+    authedFetcher,
+    swrOptions
+  );
 
   const memoizedValue = useMemo(
     () => ({
-      posts: data?.posts || [],
-      postsLoading: isLoading,
-      postsError: error,
-      postsValidating: isValidating,
-      postsEmpty: !isLoading && !data?.posts.length,
+      users: data?.data || [],
+      usersLoading: isLoading,
+      usersError: error,
+      usersValidating: isValidating,
+      usersEmpty: !isLoading && !data?.data.length,
     }),
-    [data?.posts, error, isLoading, isValidating]
+    [data?.data, error, isLoading, isValidating]
   );
 
   return memoizedValue;

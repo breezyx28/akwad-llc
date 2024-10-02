@@ -2,7 +2,7 @@
 
 import type { IUserItem, IUserTableFilters } from 'src/types/user';
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -44,34 +44,34 @@ import {
 } from 'src/components/table';
 
 import { UserTableRow } from '../user-table-row';
-import { UserTableToolbar } from '../user-table-toolbar';
-import { UserTableFiltersResult } from '../user-table-filters-result';
+import { IUsersItem, IUsersTableFilters } from 'src/types/users';
+import { useGetUsers } from 'src/actions/users';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
-
 const TABLE_HEAD = [
+  { id: 'no', label: 'No.' },
   { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
-  { id: 'status', label: 'Status', width: 100 },
+  { id: 'phoneNo', label: 'Phone No.', width: 180 },
+  { id: 'age', label: 'Age', width: 220 },
+  { id: 'hands', label: 'Hands', width: 220 },
+  { id: 'hands2', label: 'Hands 2', width: 220 },
+  { id: 'noOfSessions', label: 'No. of Sessions', width: 180 },
   { id: '', width: 88 },
 ];
 
 // ----------------------------------------------------------------------
 
 export function UserListView() {
-  const table = useTable();
+  const { users, usersLoading } = useGetUsers();
 
-  const router = useRouter();
+  const table = useTable();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState<IUserItem[]>(_userList);
+  const [tableData, setTableData] = useState<IUsersItem[]>([]);
 
-  const filters = useSetState<IUserTableFilters>({ name: '', role: [], status: 'all' });
+  const filters = useSetState<IUsersTableFilters>({ id: '', name: '', phone_number: '', age: 0 });
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -79,45 +79,19 @@ export function UserListView() {
     filters: filters.state,
   });
 
-  const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
-
   const canReset =
-    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
+    !!filters.state.name ||
+    !!filters.state.phone_number ||
+    !!filters.state.age ||
+    !!filters.state.id;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const handleDeleteRow = useCallback(
-    (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-
-      toast.success('Delete success!');
-
-      setTableData(deleteRow);
-
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, tableData]
-  );
-
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-
-    toast.success('Delete success!');
-
-    setTableData(deleteRows);
-
-    table.onUpdatePageDeleteRows({
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
-
-  const handleEditRow = useCallback(
-    (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
-    },
-    [router]
-  );
+  React.useEffect(() => {
+    if (users) {
+      setTableData(users);
+    }
+  }, [users]);
 
   return (
     <>
@@ -129,16 +103,6 @@ export function UserListView() {
             { name: 'User', href: paths.dashboard.user.root },
             { name: 'List' },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={'#'}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New user
-            </Button>
-          }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
@@ -192,8 +156,6 @@ export function UserListView() {
                         row={row}
                         selected={table.selected.includes(row.id)}
                         onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
                       />
                     ))}
 
@@ -219,29 +181,6 @@ export function UserListView() {
           />
         </Card>
       </DashboardContent>
-
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {table.selected.length} </strong> items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows();
-              confirm.onFalse();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
     </>
   );
 }
@@ -249,13 +188,13 @@ export function UserListView() {
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: IUserItem[];
-  filters: IUserTableFilters;
+  inputData: IUsersItem[];
+  filters: IUsersTableFilters;
   comparator: (a: any, b: any) => number;
 };
 
 function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
-  const { name, status, role } = filters;
+  const { name, age, phone_number, id } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -273,12 +212,16 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
+  if (phone_number) {
+    inputData = inputData.filter((user) => user.phone_number.indexOf(phone_number) !== -1);
   }
 
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+  if (id) {
+    inputData = inputData.filter((user) => user.id === id);
+  }
+
+  if (age) {
+    inputData = inputData.filter((user) => user.age === age);
   }
 
   return inputData;
