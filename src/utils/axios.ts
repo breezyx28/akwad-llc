@@ -84,6 +84,9 @@ export const endpoints = {
   categories: {
     list: '/api/category/index',
   },
+  verify: {
+    checkOTP: '/api/user/verify-otp', //-----  /verify-otp?otp=356489
+  },
   brands: {
     banners: {
       list: '/api/brand/banner/index',

@@ -3,8 +3,9 @@ import type { IPostItem } from 'src/types/blog';
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
-import { fetcher, endpoints } from 'src/utils/axios';
+import axios, { fetcher, endpoints } from 'src/utils/axios';
 import { IBannerItem } from 'src/types/banner';
+import { getAccessToken } from 'src/auth/context/sanctum';
 
 // ----------------------------------------------------------------------
 
@@ -14,29 +15,54 @@ const swrOptions = {
   revalidateOnReconnect: false,
 };
 
+const BANNER_ENDPOINT = endpoints.brands.banners;
+
 // ----------------------------------------------------------------------
 
 type BannersData = {
-  banners: IBannerItem[];
+  data: IBannerItem[];
 };
 
 export function useGetBanners() {
-  const url = endpoints.brands.banners.list;
+  const url = BANNER_ENDPOINT.list;
 
   const { data, isLoading, error, isValidating } = useSWR<BannersData>(url, fetcher, swrOptions);
 
   const memoizedValue = useMemo(
     () => ({
-      banners: data?.banners || [],
+      banners: data?.data || [],
       bannersLoading: isLoading,
       bannersError: error,
       bannersValidating: isValidating,
-      bannersEmpty: !isLoading && !data?.banners.length,
+      bannersEmpty: !isLoading && !data?.data?.length,
     }),
-    [data?.banners, error, isLoading, isValidating]
+    [data?.data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
+}
+
+type addBannerPayload = {
+  name: string;
+  type: string;
+  image: any;
+  brand_id: boolean | number;
+  link: string;
+  expiry_date: string;
+};
+
+export async function addBanner(payload: addBannerPayload) {
+  try {
+    const response = await axios.post(`${BANNER_ENDPOINT.store}`, payload, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // ----------------------------------------------------------------------

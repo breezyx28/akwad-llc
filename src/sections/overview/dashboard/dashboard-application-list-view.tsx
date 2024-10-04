@@ -146,7 +146,7 @@ export function DashboardApplicationsListView() {
           <Typography variant="h6">Applications</Typography>
           <Button
             component={RouterLink}
-            href={paths.dashboard.user.new}
+            href={'#'}
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >

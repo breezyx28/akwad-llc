@@ -7,6 +7,7 @@ import { useCallback } from 'react';
 import Chip from '@mui/material/Chip';
 
 import { chipProps, FiltersBlock, FiltersResult } from 'src/components/filters-result';
+import { IDiscountCodeTableFilters } from 'src/types/discount-code';
 
 // ----------------------------------------------------------------------
 
@@ -14,7 +15,7 @@ type Props = {
   totalResults: number;
   sx?: SxProps<Theme>;
   onResetPage: () => void;
-  filters: UseSetStateReturn<IUserTableFilters>;
+  filters: UseSetStateReturn<IDiscountCodeTableFilters>;
 };
 
 export function DiscountCodesTableFiltersResult({ filters, onResetPage, totalResults, sx }: Props) {
@@ -25,15 +26,15 @@ export function DiscountCodesTableFiltersResult({ filters, onResetPage, totalRes
 
   const handleRemoveStatus = useCallback(() => {
     onResetPage();
-    filters.setState({ status: 'all' });
+    filters.setState({ status: false });
   }, [filters, onResetPage]);
 
   const handleRemoveRole = useCallback(
     (inputValue: string) => {
-      const newValue = filters.state.role.filter((item) => item !== inputValue);
+      const newValue = filters.state.filter.filter((item) => item !== inputValue);
 
       onResetPage();
-      filters.setState({ role: newValue });
+      filters.setState({ filter: newValue });
     },
     [filters, onResetPage]
   );
@@ -45,7 +46,7 @@ export function DiscountCodesTableFiltersResult({ filters, onResetPage, totalRes
 
   return (
     <FiltersResult totalResults={totalResults} onReset={handleReset} sx={sx}>
-      <FiltersBlock label="Status:" isShow={filters.state.status !== 'all'}>
+      <FiltersBlock label="Status:" isShow={filters.state.status !== null}>
         <Chip
           {...chipProps}
           label={filters.state.status}
@@ -54,8 +55,8 @@ export function DiscountCodesTableFiltersResult({ filters, onResetPage, totalRes
         />
       </FiltersBlock>
 
-      <FiltersBlock label="Role:" isShow={!!filters.state.role.length}>
-        {filters.state.role.map((item) => (
+      <FiltersBlock label="Role:" isShow={!!filters.state.filter.length}>
+        {filters.state.filter.map((item) => (
           <Chip {...chipProps} key={item} label={item} onDelete={() => handleRemoveRole(item)} />
         ))}
       </FiltersBlock>

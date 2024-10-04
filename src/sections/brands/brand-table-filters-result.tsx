@@ -26,7 +26,7 @@ export function BrandTableFiltersResult({ filters, onResetPage, totalResults, sx
 
   const handleRemoveStatus = useCallback(() => {
     onResetPage();
-    filters.setState({ status: 'all' });
+    filters.setState({ status: false });
   }, [filters, onResetPage]);
 
   const handleRemoveRole = useCallback(
@@ -46,7 +46,7 @@ export function BrandTableFiltersResult({ filters, onResetPage, totalResults, sx
 
   return (
     <FiltersResult totalResults={totalResults} onReset={handleReset} sx={sx}>
-      <FiltersBlock label="Status:" isShow={filters.state.status !== 'all'}>
+      <FiltersBlock label="Status:" isShow={filters.state.status !== null}>
         <Chip
           {...chipProps}
           label={filters.state.status}

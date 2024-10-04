@@ -337,6 +337,18 @@ export const _brandFilter = [
     status: [`Active ✅`, `Inactive 😴`],
   },
 ];
+
+export const _discountCodesFilter = [
+  {
+    applications: [`Awan Company`, `Fintech Company`, `Amndas Company`],
+  },
+  {
+    categories: [`Restaurants 🍔`, `Shopping 🛍️`, `Stores 🛒`, `Electronics 🖥️ `],
+  },
+  {
+    status: [`Variable ✅`, `None-Variable 😴`],
+  },
+];
 // ----------------------------------------------------------------------
 
 export const _postTitles = [

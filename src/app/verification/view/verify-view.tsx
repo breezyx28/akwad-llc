@@ -17,30 +17,27 @@ import { EmailInboxIcon } from 'src/assets/icons';
 
 import { Iconify } from 'src/components/iconify';
 import { Form, Field } from 'src/components/hook-form';
+import { checkOTP } from 'src/actions/verification';
+import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
 export type VerifySchemaType = zod.infer<typeof VerifySchema>;
 
 export const VerifySchema = zod.object({
-  code: zod
-    .string()
-    .min(1, { message: 'Code is required!' })
-    .min(6, { message: 'Code must be at least 6 characters!' }),
-  email: zod
-    .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
+  otp: zod.string().refine((val) => String(val).length === 6, {
+    message: 'OTP must be a 6-digit number',
+  }),
 });
 
 // ----------------------------------------------------------------------
 
-export function CenteredVerifyView() {
+export function VerifyView() {
   const theme = useTheme();
 
   const COMMON_BLACK = theme.vars.palette.common.black;
 
-  const defaultValues = { code: '', email: '' };
+  const defaultValues = { otp: '' };
 
   const methods = useForm<VerifySchemaType>({
     resolver: zodResolver(VerifySchema),
@@ -54,9 +51,13 @@ export function CenteredVerifyView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.info('DATA', data);
+      const response = await checkOTP(data);
+
+      toast.success('Verified successfuly');
+
+      console.info('response', response);
     } catch (error) {
+      toast.error((error?.message || error?.error) ?? 'something went wrong');
       console.error(error);
     }
   });
@@ -77,7 +78,7 @@ export function CenteredVerifyView() {
 
   const renderForm = (
     <Stack spacing={3}>
-      <Field.Code name="code" />
+      <Field.Code name="otp" />
 
       <LoadingButton
         fullWidth

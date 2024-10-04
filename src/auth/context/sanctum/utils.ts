@@ -66,6 +66,16 @@ export async function isValidToken(): Promise<boolean> {
   }
 }
 
+export async function logout(): Promise<boolean> {
+  try {
+    const response = await axios.post('/api/user/logout');
+
+    return response.status === 200;
+  } catch (error) {
+    console.error('Error during logout process:', error);
+    return false;
+  }
+}
 // ----------------------------------------------------------------------
 
 export function tokenExpired() {

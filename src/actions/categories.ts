@@ -4,6 +4,7 @@ import useSWR from 'swr';
 import { useMemo } from 'react';
 
 import { fetcher, endpoints } from 'src/utils/axios';
+import { ICategoryItem } from 'src/types/category';
 
 // ----------------------------------------------------------------------
 
@@ -15,24 +16,24 @@ const swrOptions = {
 
 // ----------------------------------------------------------------------
 
-type PostsData = {
-  posts: IPostItem[];
+type CategoriesData = {
+  data: ICategoryItem[];
 };
 
-export function useGetPosts() {
-  const url = endpoints.post.list;
+export function useGetCategories() {
+  const url = endpoints.categories.list;
 
-  const { data, isLoading, error, isValidating } = useSWR<PostsData>(url, fetcher, swrOptions);
+  const { data, isLoading, error, isValidating } = useSWR<CategoriesData>(url, fetcher, swrOptions);
 
   const memoizedValue = useMemo(
     () => ({
-      posts: data?.posts || [],
-      postsLoading: isLoading,
-      postsError: error,
-      postsValidating: isValidating,
-      postsEmpty: !isLoading && !data?.posts.length,
+      categories: data?.data || [],
+      categoriesLoading: isLoading,
+      categoriesError: error,
+      categoriesValidating: isValidating,
+      categoriesEmpty: !isLoading && !data?.data?.length,
     }),
-    [data?.posts, error, isLoading, isValidating]
+    [data?.data, error, isLoading, isValidating]
   );
 
   return memoizedValue;

@@ -20,44 +20,43 @@ import { z as zod } from 'zod';
 import { Label } from 'src/components/label';
 import { Box } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { fData } from 'src/utils/format-number';
-import { useGetCategories } from 'src/actions/categories';
-import { addBrand } from 'src/actions/brands';
+import { useGetBrands } from 'src/actions/brands';
+import { addDiscountCode } from 'src/actions/discount-codes';
 
 // ----------------------------------------------------------------------
 
-export type NewBandSchemaType = zod.infer<typeof NewBrandSchema>;
+export type NewDiscountCodeSchemaType = zod.infer<typeof NewDiscountCodeSchema>;
 
-export const NewBrandSchema = zod.object({
+export const NewDiscountCodeSchema = zod.object({
   name: zod.string().min(1, { message: 'Name is required!' }),
   description: zod.string().min(1, { message: 'Description is required!' }),
-  category_id: zod.number().min(1, { message: 'Category is required!' }),
-  keywords: zod.string().min(1, { message: 'Keywords is required!' }),
-  link: zod.string().min(1, { message: 'Link is required!' }),
-  image: schemaHelper.file({ message: { required_error: 'Image is required!' } }),
+  brand_id: zod.number().min(1, { message: 'Brand is required!' }),
+  status: zod.number(),
+  coupon: zod.string().min(1, { message: 'coupon is required!' }),
+  keywords: zod.string().min(1, { message: 'keywords is required!' }),
 });
 
 // ---------------------------------------------------------------------
 
-export function AddBrandFormDialog() {
+export function AddDiscountCodeFormDialog() {
   const dialog = useBoolean();
-  const { categories, categoriesLoading } = useGetCategories();
+  const { brands, brandsLoading } = useGetBrands();
 
   const defaultValues = useMemo(
     () => ({
-      image: null,
       name: '',
       description: '',
-      category_id: 0,
+      brand_id: 0,
+      status: 0,
+      coupon: '',
       keywords: '',
-      link: '',
     }),
     []
   );
 
-  const methods = useForm<NewBandSchemaType>({
+  const methods = useForm<NewDiscountCodeSchemaType>({
     mode: 'onSubmit',
-    resolver: zodResolver(NewBrandSchema),
+    resolver: zodResolver(NewDiscountCodeSchema),
     defaultValues,
   });
 
@@ -73,15 +72,13 @@ export function AddBrandFormDialog() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const response = await addBrand(data);
-      if (response.status === 200) {
-        reset();
-        toast.success('Create success!');
-      }
-      console.info('DATA', data);
+      const response = await addDiscountCode(data);
+      reset();
+      response.status === 200 && toast.success('Create success!');
+      console.info('DATA', response.data);
     } catch (error) {
-      toast.error((error.message || error.error) ?? 'Something went wrong');
-      console.error(error);
+      console.error('discount-code-error: ', error);
+      toast.error('Soething went wrong');
     }
   });
 
@@ -94,27 +91,15 @@ export function AddBrandFormDialog() {
         variant="contained"
         startIcon={<Iconify icon="mingcute:add-line" />}
       >
-        Add Brands
+        Add Code
       </Button>
 
       <Dialog fullWidth={true} maxWidth={'md'} open={dialog.value} onClose={dialog.onFalse}>
-        <DialogTitle>Add Brands</DialogTitle>
+        <DialogTitle>Add Code</DialogTitle>
 
         <DialogContent>
           <Form methods={methods} onSubmit={onSubmit}>
-            <Stack display={'flex'} direction={'column'} spacing={3} sx={{ pt: 3 }}>
-              <Grid xs={12} md={4}>
-                <Box sx={{ mb: 5 }}>
-                  <Field.UploadPhoto
-                    sx={{
-                      borderRadius: '20%',
-                    }}
-                    name="image"
-                    maxSize={3145728}
-                  />
-                </Box>
-              </Grid>
-
+            <Stack display={'flex'} spacing={3} sx={{ pt: 3 }}>
               <Grid xs={12} md={8}>
                 <Box
                   rowGap={3}
@@ -122,21 +107,32 @@ export function AddBrandFormDialog() {
                   display="grid"
                   gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
                 >
-                  <Field.Text name="name" label="Brand name" />
-                  <Field.Text name="description" label="Description" />
-
-                  <Field.Select name="category_id" label="Category" disabled={categoriesLoading}>
-                    {categories &&
-                      categories.map((category) => (
-                        <MenuItem key={category.id} value={category.id}>
-                          {category.name}
+                  <Field.Select name="brand_id" label="Brand" disabled={brandsLoading}>
+                    {brands &&
+                      brands.map((brand) => (
+                        <MenuItem key={brand.id} value={brand.id}>
+                          {brand.name}
                         </MenuItem>
                       ))}
                   </Field.Select>
 
-                  <Field.Text name="link" label="Link" />
+                  <Field.Text name="name" label="Code name" />
                   <Field.Text name="keywords" label="Keywords" />
+
+                  <Field.Text name="coupon" label="Coupon" />
+                  <Field.Select name="status" label="Status" disabled={brandsLoading}>
+                    <MenuItem key={0} value={0}>
+                      {'Non-Variable'}
+                    </MenuItem>
+                    <MenuItem key={1} value={1}>
+                      {'Variable'}
+                    </MenuItem>
+                  </Field.Select>
+
+                  <Field.TextArea name="description" label="Description" rows={5} />
                 </Box>
+
+                <Stack alignItems="flex-end" sx={{ mt: 3 }}></Stack>
               </Grid>
             </Stack>
             <Button
@@ -144,7 +140,7 @@ export function AddBrandFormDialog() {
               sx={{
                 visibility: 'hidden',
               }}
-              id="brand-submit-btn"
+              id="code-submit-btn"
             >
               submit
             </Button>
@@ -161,10 +157,10 @@ export function AddBrandFormDialog() {
             variant="contained"
             loading={isSubmitting}
             onClick={() => {
-              document.getElementById('brand-submit-btn')?.click();
+              document.getElementById('code-submit-btn')?.click();
             }}
           >
-            {'Add Brand'}
+            {'Add Code'}
           </LoadingButton>
         </DialogActions>
       </Dialog>

@@ -2,7 +2,7 @@
 
 import type { IUserItem, IUserTableFilters } from 'src/types/user';
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -45,11 +45,12 @@ import {
 
 import { UserTableRow } from '../user-table-row';
 import { BrandTableToolbar } from '../brand-table-toolbar';
-import { BrandTableFiltersResult } from '../user-table-filters-result';
+import { BrandTableFiltersResult } from '../brand-table-filters-result';
 import { IBrandItem, IBrandTableFilters } from 'src/types/brand';
 import { _brandList } from 'src/_mock/_brand';
 import { BrandTableRow } from '../brand-table-row';
 import { AddBrandFormDialog } from '../add-brand-form-dialog';
+import { useGetBrands } from 'src/actions/brands';
 
 // ----------------------------------------------------------------------
 
@@ -68,16 +69,20 @@ const TABLE_HEAD = [
 // ----------------------------------------------------------------------
 
 export function BrandListView() {
+  const { brands, brandsLoading } = useGetBrands();
+
   const table = useTable();
 
   const router = useRouter();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState<IBrandItem[]>(_brandList);
+  const [tableData, setTableData] = useState<IBrandItem[]>([]);
 
   const filters = useSetState<IBrandTableFilters>({
     name: '',
+    link: '',
+    category: {},
     filter: [],
     description: '',
     status: false,
@@ -92,7 +97,12 @@ export function BrandListView() {
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
   const canReset =
-    !!filters.state.name || filters.state.filter.length > 0 || filters.state.status !== false;
+    !!filters.state.name ||
+    !!filters.state.link ||
+    !!filters.state.description ||
+    !!filters.state.category?.name ||
+    // filters.state.filter.includes() ||
+    filters.state.status !== false;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -124,18 +134,16 @@ export function BrandListView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
+      // router.push(paths.dashboard.user.edit(id));
     },
     [router]
   );
 
-  const handleFilterStatus = useCallback(
-    (event: React.SyntheticEvent, newValue: boolean) => {
-      table.onResetPage();
-      filters.setState({ status: newValue });
-    },
-    [filters, table]
-  );
+  React.useEffect(() => {
+    if (brands) {
+      setTableData(brands);
+    }
+  }, [brands]);
 
   return (
     <>
@@ -279,37 +287,55 @@ type ApplyFilterProps = {
 };
 
 function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
-  const { name, status, description, filter } = filters;
+  const { name, status, description, category, filter } = filters;
 
+  // Sort data using the comparator
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
-
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-
   inputData = stabilizedThis.map((el) => el[0]);
 
+  // Apply the name filter
   if (name) {
     inputData = inputData.filter(
       (brand) => brand.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
+  // Apply the description filter
   if (description) {
     inputData = inputData.filter(
       (brand) => brand.description.toLowerCase().indexOf(description.toLowerCase()) !== -1
     );
   }
 
+  // Apply the status filter
   if (status) {
     inputData = inputData.filter((brand) => brand.status === status);
   }
 
-  // if (filter.length) {
-  //   inputData = inputData.filter((brand) => filter.includes(brand.role));
-  // }
+  // Apply the filter from the Select menu
+  if (filter.length) {
+    inputData = inputData.filter((brand) =>
+      filter.some((f) => {
+        const isActiveFilter = f.toLowerCase() === 'active ✅';
+        const isInactiveFilter = f.toLowerCase() === 'inactive 😴';
+
+        console.log('filter: ', f.toLowerCase());
+
+        return (
+          brand.name.toLowerCase().includes(f.toLowerCase()) ||
+          brand.description.toLowerCase().includes(f.toLowerCase()) ||
+          brand.category?.name.toLowerCase().includes(f.toLowerCase()) ||
+          (isActiveFilter && brand.status === 1) || // Check if the brand is active
+          (isInactiveFilter && brand.status === 0) // Check if the brand is inactive
+        );
+      })
+    );
+  }
 
   return inputData;
 }

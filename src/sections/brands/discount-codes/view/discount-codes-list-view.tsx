@@ -2,7 +2,7 @@
 
 import type { IUserItem, IUserTableFilters } from 'src/types/user';
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -23,7 +23,7 @@ import { useSetState } from 'src/hooks/use-set-state';
 
 import { varAlpha } from 'src/theme/styles';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
+import { _discountCodesFilter, _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
 
 import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
@@ -43,35 +43,47 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { UserTableRow } from '../user-table-row';
-import { DiscountTableToolbar } from '../discount-table-toolbar';
+import { DiscountCodeTableRow } from '../discount-code-table-row';
+import { DiscountCodeTableToolbar } from '../discount-table-toolbar';
 import { DiscountCodesTableFiltersResult } from '../discount-codes-table-filters-result';
+import { AddDiscountCodeFormDialog } from '../add-discount-code-form-dialog';
+import { IDiscountCodeItem, IDiscountCodeTableFilters } from 'src/types/discount-code';
+import { useGetDiscountCodes } from 'src/actions/discount-codes';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
-
 const TABLE_HEAD = [
+  { id: 'brand', label: 'Brand', width: 180 },
   { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
+  { id: 'coupon', label: 'Coupon', width: 220 },
+  { id: 'description', label: 'Description', width: 180 },
   { id: 'status', label: 'Status', width: 100 },
+  { id: 'usage', label: 'Usage' },
   { id: '', width: 88 },
 ];
 
 // ----------------------------------------------------------------------
 
 export function DiscountCodesListView() {
+  const { discountCodes, discountCodesLoading } = useGetDiscountCodes();
+
   const table = useTable();
 
   const router = useRouter();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState<IUserItem[]>(_userList);
+  const [tableData, setTableData] = useState<IDiscountCodeItem[]>([]);
 
-  const filters = useSetState<IUserTableFilters>({ name: '', role: [], status: 'all' });
+  const filters = useSetState<IDiscountCodeTableFilters>({
+    name: '',
+    coupon: '',
+    category: {},
+    filter: [],
+    description: '',
+    uses: null,
+    status: false,
+  });
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -82,7 +94,13 @@ export function DiscountCodesListView() {
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
   const canReset =
-    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
+    !!filters.state.name ||
+    !!filters.state.coupon ||
+    !!filters.state.description ||
+    !!filters.state.brand?.name ||
+    // filters.state.filter.includes() ||
+    filters.state.uses !== null;
+  filters.state.status !== false;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -114,47 +132,36 @@ export function DiscountCodesListView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
+      // router.push(paths.dashboard.user.edit(id));
     },
     [router]
   );
 
-  const handleFilterStatus = useCallback(
-    (event: React.SyntheticEvent, newValue: string) => {
-      table.onResetPage();
-      filters.setState({ status: newValue });
-    },
-    [filters, table]
-  );
+  React.useEffect(() => {
+    if (discountCodes) {
+      setTableData(discountCodes);
+    }
+  }, [discountCodes]);
 
   return (
     <>
       <DashboardContent>
         <CustomBreadcrumbs
-          heading="List"
+          heading="Discount Codes"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
             { name: 'User', href: paths.dashboard.user.root },
-            { name: 'List' },
+            { name: 'discount Codes' },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.dashboard.user.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New user
-            </Button>
-          }
+          action={<AddDiscountCodeFormDialog />}
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
         <Card>
-          <DiscountTableToolbar
+          <DiscountCodeTableToolbar
             filters={filters}
             onResetPage={table.onResetPage}
-            options={{ roles: _roles }}
+            options={{ filters: _discountCodesFilter }}
           />
 
           {canReset && (
@@ -210,7 +217,7 @@ export function DiscountCodesListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row) => (
-                      <UserTableRow
+                      <DiscountCodeTableRow
                         key={row.id}
                         row={row}
                         selected={table.selected.includes(row.id)}
@@ -272,13 +279,13 @@ export function DiscountCodesListView() {
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: IUserItem[];
-  filters: IUserTableFilters;
+  inputData: IDiscountCodeItem[];
+  filters: IDiscountCodeTableFilters;
   comparator: (a: any, b: any) => number;
 };
 
 function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
-  const { name, status, role } = filters;
+  const { name, status, description, uses, filter } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -290,18 +297,48 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
 
   inputData = stabilizedThis.map((el) => el[0]);
 
+  // Apply the name filter
   if (name) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (discountCode) => discountCode.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
+  // Apply the description filter
+  if (description) {
+    inputData = inputData.filter(
+      (discountCode) =>
+        discountCode.description.toLowerCase().indexOf(description.toLowerCase()) !== -1
+    );
   }
 
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+  // Apply the status filter
+  if (status) {
+    inputData = inputData.filter((discountCode) => discountCode.status === status);
+  }
+
+  if (uses) {
+    inputData = inputData.filter((discountCode) => discountCode.uses === uses);
+  }
+
+  // Apply the filter from the Select menu
+  if (filter.length) {
+    inputData = inputData.filter((discountCode) =>
+      filter.some((f) => {
+        const isActiveFilter = f.toLowerCase() === 'variable ✅';
+        const isInactiveFilter = f.toLowerCase() === 'none-variable 😴';
+
+        console.log('filter: ', f.toLowerCase());
+
+        return (
+          discountCode.name.toLowerCase().includes(f.toLowerCase()) ||
+          discountCode.description.toLowerCase().includes(f.toLowerCase()) ||
+          discountCode.brand?.name.toLowerCase().includes(f.toLowerCase()) ||
+          (isActiveFilter && discountCode.status === 1) || // Check if the discountCode is active
+          (isInactiveFilter && discountCode.status === 0) // Check if the discountCode is inactive
+        );
+      })
+    );
   }
 
   return inputData;

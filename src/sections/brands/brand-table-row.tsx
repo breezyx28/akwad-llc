@@ -23,6 +23,8 @@ import { usePopover, CustomPopover } from 'src/components/custom-popover';
 import { BrandQuickEditForm } from './brand-quick-edit-form';
 import { IBrandItem } from 'src/types/brand';
 import { FormControlLabel, Switch } from '@mui/material';
+import { updateBrandStatus } from 'src/actions/brands';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -35,11 +37,25 @@ type Props = {
 };
 
 export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }: Props) {
+  const [statusChecked, setStatusChecked] = useState<Boolean>(row.status as Boolean);
+
   const confirm = useBoolean();
 
   const popover = usePopover();
 
   const quickEdit = useBoolean();
+
+  // Function to handle the status change
+  const handleStatusChange = async () => {
+    const newStatus = row.status === 1 ? 0 : 1;
+    setStatusChecked(Boolean(newStatus));
+    const res = await updateBrandStatus(row.id, {
+      name: row.name,
+      description: row.description,
+      status: newStatus,
+    });
+    console.log('brands-response: ', res);
+  };
 
   return (
     <>
@@ -57,7 +73,7 @@ export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteR
                 {row.name}
               </Link>
               <Box component="span" sx={{ color: 'text.disabled' }}>
-                {row.email}
+                {row.category?.name}
               </Box>
             </Stack>
           </Stack>
@@ -76,14 +92,14 @@ export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteR
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>
-          <a href="#">{row.websiteLink}</a>
+          <a href="#">{row.link}</a>
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>
-          <a href="#">{row.applicationLink}</a>
+          <a href="#">{'not-set'}</a>
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.visits}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.opend}</TableCell>
 
         <TableCell>
           <FormControlLabel
@@ -96,8 +112,8 @@ export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteR
                   },
                 }}
                 name="status"
-                checked={row.status}
-                onChange={() => alert('switched')}
+                checked={statusChecked as any}
+                onChange={handleStatusChange}
               />
             }
           />

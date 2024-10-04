@@ -12,6 +12,8 @@ import { RHFSelect, RHFMultiSelect } from './rhf-select';
 import { RHFCheckbox, RHFMultiCheckbox } from './rhf-checkbox';
 import { RHFUpload, RHFUploadBox, RHFUploadAvatar } from './rhf-upload';
 import { RHFDatePicker, RHFMobileDateTimePicker } from './rhf-date-picker';
+import { RHFUploadPhoto } from './rhf-upload-photo';
+import { RHFTextAreaField } from './rhf-text-area-field';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +26,7 @@ export const Field = {
   Slider: RHFSlider,
   Rating: RHFRating,
   Text: RHFTextField,
+  TextArea: RHFTextAreaField,
   Phone: RHFPhoneInput,
   Checkbox: RHFCheckbox,
   UploadBox: RHFUploadBox,
@@ -32,6 +35,7 @@ export const Field = {
   MultiSelect: RHFMultiSelect,
   MultiSwitch: RHFMultiSwitch,
   UploadAvatar: RHFUploadAvatar,
+  UploadPhoto: RHFUploadPhoto,
   Autocomplete: RHFAutocomplete,
   MultiCheckbox: RHFMultiCheckbox,
   CountrySelect: RHFCountrySelect,

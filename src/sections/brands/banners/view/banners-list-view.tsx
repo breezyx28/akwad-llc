@@ -2,7 +2,7 @@
 
 import type { IUserItem, IUserTableFilters } from 'src/types/user';
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -44,6 +44,8 @@ import {
 
 import { BannerTableRow } from '../banner-table-row';
 import { AddBannerFormDialog } from '../add-banner-form-dialog';
+import { useGetBanners } from 'src/actions/banners';
+import { IBannerItem, IBannerTableFilters } from 'src/types/banner';
 
 // ----------------------------------------------------------------------
 
@@ -52,22 +54,30 @@ const TABLE_HEAD = [
   { id: 'type', label: 'Type', width: 180 },
   { id: 'websiteLink', label: 'Website link', width: 220 },
   { id: 'usage', label: 'Usage', width: 180 },
-  { id: 'expiryDate', label: 'Expiry DAte', width: 100 },
+  { id: 'expiryDate', label: 'Expiry Date', width: 100 },
   { id: '', width: 88 },
 ];
 
 // ----------------------------------------------------------------------
 
 export function BannersListView() {
+  const { banners, bannersLoading } = useGetBanners();
+
   const table = useTable();
 
   const router = useRouter();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState<IUserItem[]>(_userList);
+  const [tableData, setTableData] = useState<IBannerItem[]>([]);
 
-  const filters = useSetState<IUserTableFilters>({ name: '', role: [], status: 'all' });
+  const filters = useSetState<IBannerTableFilters>({
+    brand: null,
+    expiry_date: '',
+    link: '',
+    type: '',
+    clicks: null,
+  });
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -78,7 +88,11 @@ export function BannersListView() {
   const dataInPage = rowInPage(dataFiltered, table.page, table.rowsPerPage);
 
   const canReset =
-    !!filters.state.name || filters.state.role.length > 0 || filters.state.status !== 'all';
+    !!filters.state.expiry_date ||
+    filters.state.clicks !== null ||
+    !!filters.state.brand?.name ||
+    !!filters.state.type ||
+    filters.state.clicks !== null;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -115,13 +129,11 @@ export function BannersListView() {
     [router]
   );
 
-  const handleFilterStatus = useCallback(
-    (event: React.SyntheticEvent, newValue: string) => {
-      table.onResetPage();
-      filters.setState({ status: newValue });
-    },
-    [filters, table]
-  );
+  React.useEffect(() => {
+    if (banners) {
+      setTableData(banners);
+    }
+  }, [banners]);
 
   return (
     <>
@@ -244,13 +256,13 @@ export function BannersListView() {
 // ----------------------------------------------------------------------
 
 type ApplyFilterProps = {
-  inputData: IUserItem[];
-  filters: IUserTableFilters;
+  inputData: IBannerItem[];
+  filters: IBannerTableFilters;
   comparator: (a: any, b: any) => number;
 };
 
 function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
-  const { name, status, role } = filters;
+  const { expiry_date, link, type, brand, clicks } = filters;
 
   const stabilizedThis = inputData.map((el, index) => [el, index] as const);
 
@@ -262,18 +274,30 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
 
   inputData = stabilizedThis.map((el) => el[0]);
 
-  if (name) {
+  if (brand) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (banner) => banner.brand?.name?.toLowerCase().indexOf(brand?.name.toLowerCase()) !== -1
     );
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
+  if (expiry_date) {
+    inputData = inputData.filter(
+      (banner) => banner.expiry_date?.toLowerCase().indexOf(expiry_date.toLowerCase()) !== -1
+    );
   }
 
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+  if (link) {
+    inputData = inputData.filter(
+      (banner) => banner.link?.toLowerCase().indexOf(link.toLowerCase()) !== -1
+    );
+  }
+
+  if (clicks) {
+    inputData = inputData.filter((banner) => banner.clicks === clicks);
+  }
+
+  if (type) {
+    inputData = inputData.filter((banner) => banner.type === type);
   }
 
   return inputData;

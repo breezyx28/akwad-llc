@@ -72,6 +72,7 @@ export function UserSuggestionsListView() {
       setTableData(userSuggestions);
     }
   }, [userSuggestions]);
+
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),

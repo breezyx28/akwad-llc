@@ -6,12 +6,14 @@ import { useMemo, useState } from 'react';
 import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
 import { IBrandItem } from 'src/types/brand';
 import { getAccessToken } from 'src/auth/context/sanctum';
+import { IDiscountCodeItem } from 'src/types/discount-code';
 
 // ----------------------------------------------------------------------
 
 const enableServer = false;
 
-const BRAND_ENDPOINT = endpoints.brands;
+const BRAND_ENDPOINT = endpoints.brands.codes;
+const DISCOUNT_CODE_ENDPOINT = endpoints.brands.codes;
 
 const swrOptions = {
   revalidateIfStale: enableServer,
@@ -21,14 +23,14 @@ const swrOptions = {
 
 // ----------------------------------------------------------------------
 
-type BrandsData = {
-  data: IBrandItem[];
+type DiscountCodesData = {
+  data: IDiscountCodeItem[];
 };
 
-export function useGetBrands() {
-  const url = endpoints.brands.list;
+export function useGetDiscountCodes() {
+  const url = endpoints.brands.codes.list;
 
-  const { data, isLoading, error, isValidating } = useSWR<BrandsData>(
+  const { data, isLoading, error, isValidating } = useSWR<DiscountCodesData>(
     url,
     authedFetcher,
     swrOptions
@@ -36,11 +38,11 @@ export function useGetBrands() {
 
   const memoizedValue = useMemo(
     () => ({
-      brands: data?.data || [],
-      brandsLoading: isLoading,
-      brandsError: error,
-      brandsValidating: isValidating,
-      brandsEmpty: !isLoading && !data?.data?.length,
+      discountCodes: data?.data || [],
+      discountCodesLoading: isLoading,
+      discountCodesError: error,
+      discountCodesValidating: isValidating,
+      discountCodesEmpty: !isLoading && !data?.data?.length,
     }),
     [data?.data, error, isLoading, isValidating]
   );
@@ -57,6 +59,15 @@ type updateBrandStatus = {
 
 export async function updateBrandStatus(brandId: string | number, payload: updateBrandStatus) {
   try {
+    // Create a new FormData object
+    // const formData = new FormData();
+
+    // // Assuming payload is an object, append each field to formData
+    // Object.keys(payload).forEach((key: any) => {
+    //   // @ts-ignore
+    //   formData.append(key, payload[key]);
+    // });
+
     const response = await axios.patch(BRAND_ENDPOINT.edit + brandId, payload, {
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
@@ -69,19 +80,18 @@ export async function updateBrandStatus(brandId: string | number, payload: updat
   }
 }
 
-// ----------------------------------------------------------------------
-type addBrandPayload = {
+// ----------------------------
+type addDiscountCodePayload = {
+  brand_id: string | number;
+  coupon: string;
   name: string;
-  category_id: number | string;
   description: string;
-  keywords: string;
-  link: string;
-  image: any;
+  status: number | boolean;
 };
 
-export async function addBrand(payload: addBrandPayload) {
+export async function addDiscountCode(payload: addDiscountCodePayload) {
   try {
-    const response = await axios.post(BRAND_ENDPOINT.store, payload, {
+    const response = await axios.post(DISCOUNT_CODE_ENDPOINT.store, payload, {
       headers: {
         Authorization: `Bearer ${getAccessToken()}`,
       },

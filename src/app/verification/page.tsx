@@ -1,5 +1,5 @@
 import { CONFIG } from 'src/config-global';
-import { CenteredVerifyView } from './view/centered-verify-view';
+import { VerifyView } from './view/verify-view';
 
 // import { CenteredVerifyView } from 'src/sections/auth-demo/centered';
 
@@ -8,5 +8,5 @@ import { CenteredVerifyView } from './view/centered-verify-view';
 export const metadata = { title: `Verify | Layout centered - ${CONFIG.site.name}` };
 
 export default function Page() {
-  return <CenteredVerifyView />;
+  return <VerifyView />;
 }

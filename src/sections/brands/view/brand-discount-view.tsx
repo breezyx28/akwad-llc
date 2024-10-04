@@ -45,7 +45,7 @@ import {
 
 import { UserTableRow } from '../user-table-row';
 import { BrandTableToolbar } from '../brand-table-toolbar';
-import { BrandTableFiltersResult } from '../user-table-filters-result';
+import { BrandTableFiltersResult } from '../brand-table-filters-result';
 import { IBrandTableFilters } from 'src/types/brand';
 
 // ----------------------------------------------------------------------

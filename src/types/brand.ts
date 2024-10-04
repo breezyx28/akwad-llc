@@ -5,8 +5,10 @@ import type { IDateValue, ISocialLink } from './common';
 export type IBrandTableFilters = {
   name: string;
   description: string;
-  filter: string[];
+  link: string;
+  category?: Record<any, any>;
   status: boolean;
+  filter: any[];
   [rest: string]: any | unknown;
 };
 
@@ -83,15 +85,16 @@ export type IBrandItem = {
   websiteLink?: string;
   applicationLink?: string;
   visits: number;
-  category?: string;
-  status?: boolean;
+  category_id?: any;
+  category?: Record<any, any>;
+  status?: boolean | number;
   link: string;
   image?: string;
   opend: boolean;
   created_at?: string;
   updated_at?: string;
   codes?: any[];
-  [rest: string]: any | unknown;
+  [index: string]: any | unknown;
 };
 
 export type IBrandAccount = {
