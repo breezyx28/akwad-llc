@@ -48,6 +48,7 @@ export const paths = {
     root: ROOTS.DASHBOARD,
     users: {
       root: `${ROOTS.DASHBOARD}/users/list`,
+      list: `${ROOTS.DASHBOARD}/users/list`,
       suggestions: `${ROOTS.DASHBOARD}/users/user-suggestions`,
       searchLogs: `${ROOTS.DASHBOARD}/users/search-logs`,
     },

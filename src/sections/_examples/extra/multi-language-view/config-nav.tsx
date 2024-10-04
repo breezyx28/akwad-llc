@@ -16,11 +16,6 @@ export function navData(t: TFunction<any, any>) {
       subheader: t('subheader'),
       items: [
         {
-          title: t('app'),
-          path: paths.dashboard.permission,
-          icon: <SvgColor src={`${CONFIG.site.basePath}/assets/icons/navbar/ic-invoice.svg`} />,
-        },
-        {
           title: t('travel'),
           path: '#disabled',
           icon: <SvgColor src={`${CONFIG.site.basePath}/assets/icons/navbar/ic-tour.svg`} />,
@@ -49,11 +44,6 @@ export function navData(t: TFunction<any, any>) {
           title: t('user'),
           path: 'https://www.google.com/',
           icon: <SvgColor src={`${CONFIG.site.basePath}/assets/icons/navbar/ic-user.svg`} />,
-        },
-        {
-          title: t('invoice'),
-          path: paths.dashboard.blank,
-          icon: <SvgColor src={`${CONFIG.site.basePath}/assets/icons/navbar/ic-invoice.svg`} />,
         },
       ],
     },

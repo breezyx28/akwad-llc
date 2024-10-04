@@ -111,7 +111,7 @@ export function UserListView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
+      router.push('#');
     },
     [router]
   );
@@ -128,7 +128,7 @@ export function UserListView() {
           <Typography variant="h6">Applications</Typography>
           <Button
             component={RouterLink}
-            href={paths.dashboard.user.new}
+            href={paths.dashboard.users.root}
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >

@@ -196,7 +196,7 @@ function Container({ children }: Props) {
   const onReset = useCallback(() => {
     if (completed) {
       resetState();
-      router.push(paths.product.root);
+      router.push(paths.signIn);
     }
   }, [completed, resetState, router]);
 
@@ -258,5 +258,5 @@ function createUrl(type: 'back' | 'next' | 'go', activeStep: number) {
 
   const stepParams = new URLSearchParams({ step: `${step}` }).toString();
 
-  return `${paths.product.checkout}?${stepParams}`;
+  return `${paths.signIn}?${stepParams}`;
 }

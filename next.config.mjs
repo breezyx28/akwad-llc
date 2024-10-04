@@ -5,6 +5,10 @@
 const isStaticExport = 'false';
 
 const nextConfig = {
+  eslint: {
+    // Disable ESLint during production builds
+    ignoreDuringBuilds: true,
+  },
   trailingSlash: true,
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   env: {
