@@ -52,7 +52,14 @@ declare module '@mui/material' {
   }
 }
 
-export type ColorType = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
+export type ColorType =
+  | 'primary'
+  | 'green'
+  | 'secondary'
+  | 'info'
+  | 'success'
+  | 'warning'
+  | 'error';
 
 // ----------------------------------------------------------------------
 
@@ -60,7 +67,10 @@ export type ColorType = 'primary' | 'secondary' | 'info' | 'success' | 'warning'
 export const grey = createPaletteChannel(COLORS.grey);
 
 // Primary
-export const primary = createPaletteChannel(COLORS.primary);
+export const primary = createPaletteChannel(COLORS.black);
+
+// old Primary
+export const green = createPaletteChannel(COLORS.primary);
 
 // Secondary
 export const secondary = createPaletteChannel(COLORS.secondary);
@@ -113,6 +123,7 @@ export const action = {
  */
 export const basePalette = {
   primary,
+  green,
   secondary,
   info,
   success,

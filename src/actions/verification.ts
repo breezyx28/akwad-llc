@@ -1,5 +1,3 @@
-import type { IPostItem } from 'src/types/blog';
-
 import useSWR, { mutate } from 'swr';
 import { useMemo, useState } from 'react';
 

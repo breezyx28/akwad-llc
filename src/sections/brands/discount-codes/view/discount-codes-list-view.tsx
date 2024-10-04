@@ -1,7 +1,5 @@
 'use client';
 
-import type { IUserItem, IUserTableFilters } from 'src/types/user';
-
 import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
@@ -150,7 +148,7 @@ export function DiscountCodesListView() {
           heading="Discount Codes"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'User', href: paths.dashboard.user.root },
+            { name: 'Users', href: paths.dashboard.users.root },
             { name: 'discount Codes' },
           ]}
           action={<AddDiscountCodeFormDialog />}

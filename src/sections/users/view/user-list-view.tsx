@@ -100,7 +100,7 @@ export function UserListView() {
           heading="List"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'User', href: paths.dashboard.user.root },
+            { name: 'Users', href: paths.dashboard.users.root },
             { name: 'List' },
           ]}
           sx={{ mb: { xs: 3, md: 5 } }}

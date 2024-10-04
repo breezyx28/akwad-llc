@@ -7,6 +7,14 @@
     "darker": "#004B50",
     "contrastText": "#FFFFFF"
   },
+  "black": {
+    "lighter": "#B0B0B0",
+    "light": "#808080",
+    "main": "#4F4F4F",
+    "dark": "#2F2F2F",
+    "darker": "#000000",
+    "contrastText": "#FFFFFF"
+  },
   "secondary": {
     "lighter": "#EFD6FF",
     "light": "#C684FF",

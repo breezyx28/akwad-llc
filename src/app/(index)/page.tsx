@@ -1,13 +1,13 @@
-import { HomeView } from 'src/sections/home/view';
+'use client';
 
-// ----------------------------------------------------------------------
-
-export const metadata = {
-  title: 'Minimals UI: The starting point for your next project',
-  description:
-    'The starting point for your next project with Minimal UI Kit, built on the newest version of Material-UI ©, ready to be customized to your style',
-};
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { paths } from 'src/routes/paths';
 
 export default function Page() {
-  return <HomeView />;
+  const { push } = useRouter();
+  React.useEffect(() => {
+    push(paths.dashboard.root);
+  }, []);
+  return <></>;
 }

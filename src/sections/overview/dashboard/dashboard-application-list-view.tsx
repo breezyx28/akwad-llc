@@ -1,7 +1,5 @@
 'use client';
 
-import type { IUserItem, IUserTableFilters } from 'src/types/user';
-
 import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
@@ -129,7 +127,7 @@ export function DashboardApplicationsListView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
+      // show put code here
     },
     [router]
   );
