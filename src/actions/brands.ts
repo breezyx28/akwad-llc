@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
 import { IBrandItem } from 'src/types/brand';
 import { getAccessToken } from 'src/auth/context/sanctum';
+import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
@@ -47,27 +48,6 @@ export function useGetBrands() {
 }
 
 // ----------------------------------------------------------------------
-type updateBrandStatus = {
-  name: string;
-  description: string;
-  status: number;
-};
-
-export async function updateBrandStatus(brandId: string | number, payload: updateBrandStatus) {
-  try {
-    const response = await axios.patch(BRAND_ENDPOINT.edit + brandId, payload, {
-      headers: {
-        Authorization: `Bearer ${getAccessToken()}`,
-      },
-    });
-
-    return response;
-  } catch (error) {
-    throw error;
-  }
-}
-
-// ----------------------------------------------------------------------
 type addBrandPayload = {
   name: string;
   category_id: number | string;
@@ -92,3 +72,75 @@ export async function addBrand(payload: addBrandPayload) {
 }
 
 // ----------------------------------------------------------------------
+type updateBrandStatusPayload = {
+  name: string;
+  description: string;
+  status: number;
+};
+
+export async function updateBrandStatus(
+  brandId: string | number,
+  payload: updateBrandStatusPayload
+) {
+  try {
+    const response = await axios.patch(BRAND_ENDPOINT.edit + brandId, payload, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
+
+    if (response.status === 200) {
+      toast.success('Updated successfuly');
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// ------------------------------------------------------
+
+type updateBrandPayload = {
+  name: string;
+  category_id: number | string;
+  description: string;
+  keywords: string;
+  link: string;
+  image: any;
+};
+
+export async function updateBrand(brandId: string | number, payload: updateBrandPayload) {
+  try {
+    const response = await axios.patch(BRAND_ENDPOINT.edit + brandId, payload, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
+
+    if (response.status === 200) {
+      toast.success('Updated successfuly');
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// ----------------------------------------------------------------------
+
+export async function deleteBrand(brandId: string | number) {
+  try {
+    const response = await axios.delete(BRAND_ENDPOINT.delete + brandId, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
+
+    if (response.status === 200) {
+      toast.success('deleted successfuly');
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}

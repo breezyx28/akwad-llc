@@ -27,9 +27,12 @@ export function RHFDatePicker({ name, slotProps, ...other }: RHFDatePickerProps)
       render={({ field, fieldState: { error } }) => (
         <DatePicker
           {...field}
-          value={dayjs(field.value)}
-          onChange={(newValue) => field.onChange(dayjs(newValue).format())}
-          format={formatStr.split.date}
+          value={field.value ? dayjs(field.value) : null}
+          onChange={(newValue) => {
+            // Ensure that the newValue is a valid date and format it to 'YYYY-MM-DD'
+            field.onChange(newValue ? dayjs(newValue).format('YYYY-MM-DD') : null);
+          }}
+          format="YYYY-MM-DD" // Ensure the picker displays the correct format
           slotProps={{
             textField: {
               fullWidth: true,

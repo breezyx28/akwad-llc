@@ -5,6 +5,7 @@ import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
 import { IBrandItem } from 'src/types/brand';
 import { getAccessToken } from 'src/auth/context/sanctum';
 import { IDiscountCodeItem } from 'src/types/discount-code';
+import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
@@ -48,36 +49,6 @@ export function useGetDiscountCodes() {
   return memoizedValue;
 }
 
-// ----------------------------------------------------------------------
-type updateBrandStatus = {
-  name: string;
-  description: string;
-  status: number;
-};
-
-export async function updateBrandStatus(brandId: string | number, payload: updateBrandStatus) {
-  try {
-    // Create a new FormData object
-    // const formData = new FormData();
-
-    // // Assuming payload is an object, append each field to formData
-    // Object.keys(payload).forEach((key: any) => {
-    //   // @ts-ignore
-    //   formData.append(key, payload[key]);
-    // });
-
-    const response = await axios.patch(BRAND_ENDPOINT.edit + brandId, payload, {
-      headers: {
-        Authorization: `Bearer ${getAccessToken()}`,
-      },
-    });
-
-    return response;
-  } catch (error) {
-    throw error;
-  }
-}
-
 // ----------------------------
 type addDiscountCodePayload = {
   brand_id: string | number;
@@ -102,3 +73,54 @@ export async function addDiscountCode(payload: addDiscountCodePayload) {
 }
 
 // ----------------------------------------------------------------------
+
+// ------------------------------------------------------
+
+type updateDiscountCodePayload = {
+  name: string;
+  description: string;
+  brand_id: number | string;
+  keywords: string;
+  coupon: string;
+};
+
+export async function updateDiscountCode(
+  discountCodeID: string | number,
+  payload: updateDiscountCodePayload
+) {
+  try {
+    const response = await axios.patch(DISCOUNT_CODE_ENDPOINT.edit + discountCodeID, payload, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
+
+    if (response.status === 200) {
+      toast.success('Updated successfuly');
+    }
+    return response;
+  } catch (error) {
+    toast.error((error.message || error.error) ?? 'Something went wrong');
+    throw error;
+  }
+}
+
+// ----------------------------------------------------------------------
+
+export async function deleteDiscountCode(discountCodeID: string | number) {
+  try {
+    const response = await axios.delete(DISCOUNT_CODE_ENDPOINT.delete + discountCodeID, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
+
+    if (response.status === 200) {
+      toast.success('deleted successfuly');
+    }
+    return response;
+  } catch (error) {
+    toast.error((error.message || error.error) ?? 'Something went wrong');
+    throw error;
+  }
+}

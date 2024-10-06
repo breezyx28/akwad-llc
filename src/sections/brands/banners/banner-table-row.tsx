@@ -21,6 +21,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 import { IBannerItem } from 'src/types/banner';
+import { UpdateBannerFormDialog } from './update-banner-form-dialog';
+import { deleteBanner } from 'src/actions/banners';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +39,14 @@ export function BannerTableRow({ row, selected, onEditRow, onSelectRow, onDelete
 
   const popover = usePopover();
 
-  const quickEdit = useBoolean();
+  const editDialog = useBoolean();
+
+  // Function to handle the status change
+  const handleDeleteBanner = async () => {
+    onDeleteRow();
+
+    await deleteBanner(row.id);
+  };
 
   return (
     <>
@@ -98,7 +107,7 @@ export function BannerTableRow({ row, selected, onEditRow, onSelectRow, onDelete
 
           <MenuItem
             onClick={() => {
-              onEditRow();
+              editDialog.onTrue();
               popover.onClose();
             }}
           >
@@ -114,10 +123,18 @@ export function BannerTableRow({ row, selected, onEditRow, onSelectRow, onDelete
         title="Delete"
         content="Are you sure want to delete?"
         action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
+          <Button variant="contained" color="error" onClick={handleDeleteBanner}>
             Delete
           </Button>
         }
+      />
+
+      <UpdateBannerFormDialog
+        currentData={row}
+        dialog={{
+          open: editDialog.value,
+          onClose: editDialog.onFalse,
+        }}
       />
     </>
   );

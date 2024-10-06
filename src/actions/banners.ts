@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import axios, { fetcher, endpoints } from 'src/utils/axios';
 import { IBannerItem } from 'src/types/banner';
 import { getAccessToken } from 'src/auth/context/sanctum';
+import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
@@ -64,27 +65,49 @@ export async function addBanner(payload: addBannerPayload) {
 }
 
 // ----------------------------------------------------------------------
-
-type BannerData = {
-  banner: IBannerItem;
+type updateBannerPayload = {
+  expiry_date: string;
+  type: string;
+  link: string;
+  image: string;
 };
 
-export function useGetBanner(title: string) {
-  const url = title ? [endpoints.post.details, { params: { title } }] : '';
+export async function updateBanner(bannerID: string | number, payload: updateBannerPayload) {
+  try {
+    const response = await axios.patch(BANNER_ENDPOINT.edit + bannerID, payload, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
 
-  const { data, isLoading, error, isValidating } = useSWR<BannerData>(url, fetcher, swrOptions);
+    if (response.status === 200) {
+      toast.success('Updated successfuly');
+    }
+    return response;
+  } catch (error) {
+    toast.error((error.message || error.error) ?? 'Something went wrong');
+    throw error;
+  }
+}
 
-  const memoizedValue = useMemo(
-    () => ({
-      banner: data?.banner,
-      bannerLoading: isLoading,
-      bannerError: error,
-      bannerValidating: isValidating,
-    }),
-    [data?.banner, error, isLoading, isValidating]
-  );
+// ----------------------------------------------------------------------
 
-  return memoizedValue;
+export async function deleteBanner(bannerID: string | number) {
+  try {
+    const response = await axios.delete(BANNER_ENDPOINT.delete + bannerID, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
+
+    if (response.status === 200) {
+      toast.success('deleted successfuly');
+    }
+    return response;
+  } catch (error) {
+    toast.error((error.message || error.error) ?? 'Something went wrong');
+    throw error;
+  }
 }
 
 // ----------------------------------------------------------------------

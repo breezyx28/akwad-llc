@@ -23,8 +23,10 @@ import { usePopover, CustomPopover } from 'src/components/custom-popover';
 import { BrandQuickEditForm } from './brand-quick-edit-form';
 import { IBrandItem } from 'src/types/brand';
 import { FormControlLabel, Switch } from '@mui/material';
-import { updateBrandStatus } from 'src/actions/brands';
+import { deleteBrand, updateBrandStatus } from 'src/actions/brands';
 import { useState } from 'react';
+import { UpdateBrandFormDialog } from './update-brand-form-dialog';
+import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +43,8 @@ export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteR
 
   const confirm = useBoolean();
 
+  const editDialog = useBoolean();
+
   const popover = usePopover();
 
   const quickEdit = useBoolean();
@@ -54,7 +58,26 @@ export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteR
       description: row.description,
       status: newStatus,
     });
+
+    if (res.status === 200) {
+      toast.success(`${row.name} status changed`);
+    } else {
+      toast.error(`something went wrong`);
+    }
     console.log('brands-response: ', res);
+  };
+
+  // Function to handle the status change
+  const handleDeleteBrand = async () => {
+    onDeleteRow();
+
+    const res = await deleteBrand(row.id);
+
+    if (res.status === 200) {
+      toast.success(`${row.name} status deleted`);
+    } else {
+      toast.error(`something went wrong`);
+    }
   };
 
   return (
@@ -128,8 +151,6 @@ export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteR
         </TableCell>
       </TableRow>
 
-      <BrandQuickEditForm currentBrand={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
-
       <CustomPopover
         open={popover.open}
         anchorEl={popover.anchorEl}
@@ -150,7 +171,7 @@ export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteR
 
           <MenuItem
             onClick={() => {
-              onEditRow();
+              editDialog.onTrue();
               popover.onClose();
             }}
           >
@@ -166,10 +187,18 @@ export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteR
         title="Delete"
         content="Are you sure want to delete?"
         action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
+          <Button variant="contained" color="error" onClick={handleDeleteBrand}>
             Delete
           </Button>
         }
+      />
+
+      <UpdateBrandFormDialog
+        currentData={row}
+        dialog={{
+          open: editDialog.value,
+          onClose: editDialog.onFalse,
+        }}
       />
     </>
   );

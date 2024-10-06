@@ -21,6 +21,9 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 import { IDiscountCodeItem } from 'src/types/discount-code';
+import { UpdateDiscountCodeFormDialog } from './update-discount-code-form-dialog';
+import { deleteDiscountCode } from 'src/actions/discount-codes';
+import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +44,16 @@ export function DiscountCodeTableRow({
 }: Props) {
   const confirm = useBoolean();
 
+  const editDialog = useBoolean();
+
   const popover = usePopover();
+
+  // Function to handle the status change
+  const handleDeleteBrand = async () => {
+    onDeleteRow();
+
+    await deleteDiscountCode(row.id);
+  };
 
   return (
     <>
@@ -106,7 +118,7 @@ export function DiscountCodeTableRow({
 
           <MenuItem
             onClick={() => {
-              onEditRow();
+              editDialog.onTrue();
               popover.onClose();
             }}
           >
@@ -122,10 +134,18 @@ export function DiscountCodeTableRow({
         title="Delete"
         content="Are you sure want to delete?"
         action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
+          <Button variant="contained" color="error" onClick={handleDeleteBrand}>
             Delete
           </Button>
         }
+      />
+
+      <UpdateDiscountCodeFormDialog
+        currentData={row}
+        dialog={{
+          open: editDialog.value,
+          onClose: editDialog.onFalse,
+        }}
       />
     </>
   );
