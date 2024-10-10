@@ -43,7 +43,6 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { UserTableRow } from '../user-table-row';
 import { BrandTableToolbar } from '../brand-table-toolbar';
 import { BrandTableFiltersResult } from '../brand-table-filters-result';
 import { IBrandItem, IBrandTableFilters } from 'src/types/brand';
