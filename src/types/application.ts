@@ -3,6 +3,7 @@ import type { IDateValue, ISocialLink } from './common';
 // ----------------------------------------------------------------------
 
 export type IApplicationTableFilters = {
+  name?: string;
   brand: string;
   avatarUrl?: string;
   numberOfUsers: number;
@@ -10,6 +11,7 @@ export type IApplicationTableFilters = {
   numberOfSessions: number;
   visits: number;
   usageProcesses: number;
+  [index: string]: any;
 };
 
 export type IUserProfileCover = {
@@ -80,13 +82,16 @@ export type IUserCard = {
 
 export type IApplicationItem = {
   id: string;
-  brand: string;
+  name?: string;
+  brand?: string;
   avatarUrl?: string;
-  numberOfUsers: number;
-  numberOfDownloads: number;
-  numberOfSessions: number;
-  visits: number;
-  usageProcesses: number;
+  image?: string;
+  numberOfUsers?: number;
+  numberOfDownloads?: number;
+  numberOfSessions?: number;
+  visits?: number;
+  usageProcesses?: number;
+  [index: string]: unknown;
 };
 
 export type IUserAccount = {

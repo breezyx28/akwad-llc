@@ -71,6 +71,10 @@ export function AddBrandFormDialog() {
 
   const values = watch();
 
+  if (values?.image) {
+    console.log('watching-image: ', values?.image);
+  }
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       const response = await addBrand(data);

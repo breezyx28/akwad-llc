@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -47,6 +47,7 @@ import { DashboardApplicationsTableRow } from './dashboard-applications-table-ro
 import { IApplicationItem, IApplicationTableFilters } from 'src/types/application';
 import { string } from 'zod';
 import { _applicationList } from 'src/_mock/_application';
+import { useGetApplications } from 'src/actions/applications';
 
 // ----------------------------------------------------------------------
 
@@ -57,12 +58,14 @@ const TABLE_HEAD = [
   { id: 'numberOfSessions', label: 'Number of sessions', width: 220 },
   { id: 'visits', label: 'Visits', width: 180 },
   { id: 'usageProcesses', label: 'Usage processes', width: 100 },
-  { id: '', width: 88 },
+  // { id: '', width: 88 },
 ];
 
 // ----------------------------------------------------------------------
 
 export function DashboardApplicationsListView() {
+  const { applications, applicationsLoading } = useGetApplications();
+
   const table = useTable();
 
   const router = useRouter();
@@ -72,6 +75,7 @@ export function DashboardApplicationsListView() {
   const [tableData, setTableData] = useState<IApplicationItem[]>(_applicationList);
 
   const filters = useSetState<IApplicationTableFilters>({
+    name: '',
     brand: '',
     numberOfUsers: 0,
     avatarUrl: '',
@@ -131,6 +135,12 @@ export function DashboardApplicationsListView() {
     },
     [router]
   );
+
+  React.useEffect(() => {
+    if (applications) {
+      setTableData(applications);
+    }
+  }, [applications]);
 
   return (
     <>
@@ -263,6 +273,7 @@ type ApplyFilterProps = {
 
 function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
   const {
+    name,
     brand,
     numberOfDownloads,
     numberOfSessions,
@@ -282,9 +293,9 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
 
   inputData = stabilizedThis.map((el) => el[0]);
 
-  if (brand) {
+  if (name) {
     inputData = inputData.filter(
-      (user) => user.brand.toLowerCase().indexOf(brand.toLowerCase()) !== -1
+      (user) => user?.name?.toLowerCase().indexOf(name?.toLowerCase()) !== -1
     );
   }
 

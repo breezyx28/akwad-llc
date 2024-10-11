@@ -6,6 +6,8 @@ import { Upload, UploadBox } from '../upload';
 
 import type { UploadProps } from '../upload';
 import { UploadPhoto } from '../upload/upload-photo';
+import { uploadImage } from 'src/actions/users';
+import React from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -17,16 +19,33 @@ type Props = UploadProps & {
 
 export function RHFUploadPhoto({ name, ...other }: Props) {
   const { control, setValue } = useFormContext();
+  const [uploaded, setUploaded] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    if (uploaded) {
+      console.log('uploaded-status: ', uploaded);
+    }
+  }, [uploaded]);
 
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => {
-        const onDrop = (acceptedFiles: File[]) => {
+        const onDrop = async (acceptedFiles: File[]) => {
           const value = acceptedFiles[0];
 
           setValue(name, value, { shouldValidate: true });
+
+          // upload image to the server
+          const response = await uploadImage({
+            image: value,
+          });
+
+          if (response) {
+            setUploaded(response);
+            setValue(name, value, { shouldValidate: true });
+          }
         };
 
         return (

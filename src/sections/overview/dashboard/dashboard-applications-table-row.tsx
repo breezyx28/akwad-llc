@@ -22,6 +22,7 @@ import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 import { UserQuickEditForm } from './user-quick-edit-form';
 import { IApplicationItem } from 'src/types/application';
+import { _mock } from 'src/_mock';
 
 // ----------------------------------------------------------------------
 
@@ -44,8 +45,6 @@ export function DashboardApplicationsTableRow({
 
   const popover = usePopover();
 
-  const quickEdit = useBoolean();
-
   return (
     <>
       <TableRow hover selected={selected} aria-checked={selected} tabIndex={-1}>
@@ -55,28 +54,26 @@ export function DashboardApplicationsTableRow({
 
         <TableCell>
           <Stack spacing={2} direction="row" alignItems="center">
-            <Avatar alt={row.brand} src={row.avatarUrl} />
+            <Avatar alt={row?.name} src={row?.image} />
 
             <Stack sx={{ typography: 'body2', flex: '1 1 auto', alignItems: 'flex-start' }}>
               <Link color="inherit" onClick={onEditRow} sx={{ cursor: 'pointer' }}>
-                {row.brand}
+                {row.name}
               </Link>
             </Stack>
           </Stack>
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.numberOfUsers}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{_mock.number.nativeM(+row.id)}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.numberOfDownloads}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{_mock.number.nativeS(+row.id)}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.numberOfSessions}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{_mock.number.nativeM(+row.id)}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.visits}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{_mock.number.nativeL(+row.id)}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.usageProcesses}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{_mock.number.nativeL(+row.id)}</TableCell>
       </TableRow>
-
-      {/* <UserQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} /> */}
 
       <CustomPopover
         open={popover.open}

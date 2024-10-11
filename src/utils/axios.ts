@@ -57,30 +57,33 @@ export const authedFetcher = async (args: string | [string, AxiosRequestConfig])
 // ----------------------------------------------------------------------
 
 export const endpoints = {
-  chat: '/api/chat',
-  kanban: '/api/kanban',
+  // chat: '/api/chat',
+  // kanban: '/api/kanban',
   calendar: '/api/calendar',
   auth: {
     me: '/api/auth/me',
     signIn: '/api/login',
     signUp: '/api/register',
   },
-  mail: {
-    list: '/api/mail/list',
-    details: '/api/mail/details',
-    labels: '/api/mail/labels',
+  applications: {
+    list: '/api/application/index',
   },
-  post: {
-    list: '/api/post/list',
-    details: '/api/post/details',
-    latest: '/api/post/latest',
-    search: '/api/post/search',
-  },
-  product: {
-    list: '/api/product/list',
-    details: '/api/product/details',
-    search: '/api/product/search',
-  },
+  // mail: {
+  //   list: '/api/mail/list',
+  //   details: '/api/mail/details',
+  //   labels: '/api/mail/labels',
+  // },
+  // post: {
+  //   list: '/api/post/list',
+  //   details: '/api/post/details',
+  //   latest: '/api/post/latest',
+  //   search: '/api/post/search',
+  // },
+  // product: {
+  //   list: '/api/product/list',
+  //   details: '/api/product/details',
+  //   search: '/api/product/search',
+  // },
   categories: {
     list: '/api/category/index',
   },
@@ -125,5 +128,6 @@ export const endpoints = {
     },
     list: '/api/user/index',
     show: '/api/user/show/',
+    uploadImage: '/api/user/upload-image',
   },
 };

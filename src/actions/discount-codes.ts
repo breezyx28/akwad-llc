@@ -9,10 +9,10 @@ import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
-const enableServer = false;
+const enableServer = true;
 
 const BRAND_ENDPOINT = endpoints.brands.codes;
-const DISCOUNT_CODE_ENDPOINT = endpoints.brands.codes;
+export const DISCOUNT_CODE_ENDPOINT = endpoints.brands.codes;
 
 const swrOptions = {
   revalidateIfStale: enableServer,
@@ -66,6 +66,8 @@ export async function addDiscountCode(payload: addDiscountCodePayload) {
       },
     });
 
+    mutate(DISCOUNT_CODE_ENDPOINT.list);
+
     return response;
   } catch (error) {
     throw error;
@@ -97,6 +99,7 @@ export async function updateDiscountCode(
 
     if (response.status === 200) {
       toast.success('Updated successfuly');
+      mutate(DISCOUNT_CODE_ENDPOINT.list);
     }
     return response;
   } catch (error) {
@@ -117,6 +120,7 @@ export async function deleteDiscountCode(discountCodeID: string | number) {
 
     if (response.status === 200) {
       toast.success('deleted successfuly');
+      mutate(DISCOUNT_CODE_ENDPOINT.list);
     }
     return response;
   } catch (error) {

@@ -1,15 +1,20 @@
 import type { IPostItem } from 'src/types/blog';
 
-import useSWR from 'swr';
 import { useMemo } from 'react';
-
-import { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
+import useSWR, { mutate } from 'swr';
+import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
 import { IUsersItem } from 'src/types/users';
+import { getAccessToken } from 'src/auth/context/sanctum';
+import { BRAND_ENDPOINT } from './brands';
+import { BANNER_ENDPOINT } from './banners';
+import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
+export const USER_ENDPOINT = endpoints.users;
+
 const swrOptions = {
-  revalidateIfStale: false,
+  revalidateIfStale: true,
   revalidateOnFocus: false,
   revalidateOnReconnect: false,
 };
@@ -21,7 +26,7 @@ type UsersData = {
 };
 
 export function useGetUsers() {
-  const url = endpoints.users.list;
+  const url = USER_ENDPOINT.list;
 
   const { data, isLoading, error, isValidating } = useSWR<UsersData>(
     url,
@@ -45,81 +50,27 @@ export function useGetUsers() {
 
 // ----------------------------------------------------------------------
 
-type PostData = {
-  post: IPostItem;
+type uploadImagePayload = {
+  image: any;
 };
 
-export function useGetPost(title: string) {
-  const url = title ? [endpoints.post.details, { params: { title } }] : '';
+export async function uploadImage(payload: uploadImagePayload) {
+  try {
+    const response = await axios.post(USER_ENDPOINT.uploadImage, payload, {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+      },
+    });
 
-  const { data, isLoading, error, isValidating } = useSWR<PostData>(url, fetcher, swrOptions);
+    mutate(USER_ENDPOINT.list);
+    mutate(BRAND_ENDPOINT.list);
+    mutate(BANNER_ENDPOINT.list);
 
-  const memoizedValue = useMemo(
-    () => ({
-      post: data?.post,
-      postLoading: isLoading,
-      postError: error,
-      postValidating: isValidating,
-    }),
-    [data?.post, error, isLoading, isValidating]
-  );
+    toast.success('Image uploaded successfuly');
 
-  return memoizedValue;
-}
-
-// ----------------------------------------------------------------------
-
-type LatestPostsData = {
-  latestPosts: IPostItem[];
-};
-
-export function useGetLatestPosts(title: string) {
-  const url = title ? [endpoints.post.latest, { params: { title } }] : '';
-
-  const { data, isLoading, error, isValidating } = useSWR<LatestPostsData>(
-    url,
-    fetcher,
-    swrOptions
-  );
-
-  const memoizedValue = useMemo(
-    () => ({
-      latestPosts: data?.latestPosts || [],
-      latestPostsLoading: isLoading,
-      latestPostsError: error,
-      latestPostsValidating: isValidating,
-      latestPostsEmpty: !isLoading && !data?.latestPosts.length,
-    }),
-    [data?.latestPosts, error, isLoading, isValidating]
-  );
-
-  return memoizedValue;
-}
-
-// ----------------------------------------------------------------------
-
-type SearchResultsData = {
-  results: IPostItem[];
-};
-
-export function useSearchPosts(query: string) {
-  const url = query ? [endpoints.post.search, { params: { query } }] : '';
-
-  const { data, isLoading, error, isValidating } = useSWR<SearchResultsData>(url, fetcher, {
-    ...swrOptions,
-    keepPreviousData: true,
-  });
-
-  const memoizedValue = useMemo(
-    () => ({
-      searchResults: data?.results || [],
-      searchLoading: isLoading,
-      searchError: error,
-      searchValidating: isValidating,
-      searchEmpty: !isLoading && !data?.results.length,
-    }),
-    [data?.results, error, isLoading, isValidating]
-  );
-
-  return memoizedValue;
+    return response;
+  } catch (error) {
+    toast.error((error.message || error.error) ?? 'Something went wrong');
+    throw error;
+  }
 }

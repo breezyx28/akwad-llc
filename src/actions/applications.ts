@@ -1,18 +1,14 @@
-import type { IPostItem } from 'src/types/blog';
+import useSWR from 'swr';
+import { useMemo } from 'react';
 
-import useSWR, { mutate } from 'swr';
-import { useMemo, useState } from 'react';
-
-import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
-import { IBrandItem } from 'src/types/brand';
-import { getAccessToken } from 'src/auth/context/sanctum';
+import { endpoints, authedFetcher } from 'src/utils/axios';
 import { IApplicationItem } from 'src/types/application';
 
 // ----------------------------------------------------------------------
 
-const enableServer = false;
+const enableServer = true;
 
-const BRAND_ENDPOINT = endpoints.brands;
+const APPLICATION_ENDPOINT = endpoints.applications;
 
 const swrOptions = {
   revalidateIfStale: enableServer,
@@ -27,7 +23,7 @@ type ApplicationsData = {
 };
 
 export function useGetApplications() {
-  const url = endpoints.brands.list;
+  const url = APPLICATION_ENDPOINT.list;
 
   const { data, isLoading, error, isValidating } = useSWR<ApplicationsData>(
     url,
@@ -37,11 +33,11 @@ export function useGetApplications() {
 
   const memoizedValue = useMemo(
     () => ({
-      brands: data?.data || [],
-      brandsLoading: isLoading,
-      brandsError: error,
-      brandsValidating: isValidating,
-      brandsEmpty: !isLoading && !data?.data?.length,
+      applications: data?.data || [],
+      applicationsLoading: isLoading,
+      applicationsError: error,
+      applicationsValidating: isValidating,
+      applicationsEmpty: !isLoading && !data?.data?.length,
     }),
     [data?.data, error, isLoading, isValidating]
   );

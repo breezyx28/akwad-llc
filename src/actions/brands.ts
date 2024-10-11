@@ -8,9 +8,9 @@ import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
-const enableServer = false;
+const enableServer = true;
 
-const BRAND_ENDPOINT = endpoints.brands;
+export const BRAND_ENDPOINT = endpoints.brands;
 
 const swrOptions = {
   revalidateIfStale: enableServer,
@@ -65,8 +65,11 @@ export async function addBrand(payload: addBrandPayload) {
       },
     });
 
+    mutate(BRAND_ENDPOINT.list);
+
     return response;
   } catch (error) {
+    toast.error((error.message || error.error) ?? 'Something went wrong');
     throw error;
   }
 }
@@ -91,9 +94,11 @@ export async function updateBrandStatus(
 
     if (response.status === 200) {
       toast.success('Updated successfuly');
+      mutate(BRAND_ENDPOINT.list);
     }
     return response;
   } catch (error) {
+    toast.error((error.message || error.error) ?? 'Something went wrong');
     throw error;
   }
 }
@@ -119,9 +124,11 @@ export async function updateBrand(brandId: string | number, payload: updateBrand
 
     if (response.status === 200) {
       toast.success('Updated successfuly');
+      mutate(BRAND_ENDPOINT.list);
     }
     return response;
   } catch (error) {
+    toast.error((error.message || error.error) ?? 'Something went wrong');
     throw error;
   }
 }
@@ -138,9 +145,11 @@ export async function deleteBrand(brandId: string | number) {
 
     if (response.status === 200) {
       toast.success('deleted successfuly');
+      mutate(BRAND_ENDPOINT.list);
     }
     return response;
   } catch (error) {
+    toast.error((error.message || error.error) ?? 'Something went wrong');
     throw error;
   }
 }

@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { useMemo } from 'react';
 
 import axios, { fetcher, endpoints } from 'src/utils/axios';
@@ -8,13 +8,15 @@ import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
-const swrOptions = {
-  revalidateIfStale: false,
-  revalidateOnFocus: false,
-  revalidateOnReconnect: false,
-};
+const enableServer = true;
 
-const BANNER_ENDPOINT = endpoints.brands.banners;
+export const BANNER_ENDPOINT = endpoints.brands.banners;
+
+const swrOptions = {
+  revalidateIfStale: enableServer,
+  revalidateOnFocus: enableServer,
+  revalidateOnReconnect: enableServer,
+};
 
 // ----------------------------------------------------------------------
 
@@ -58,8 +60,11 @@ export async function addBanner(payload: addBannerPayload) {
       },
     });
 
+    mutate(BANNER_ENDPOINT.list);
+
     return response;
   } catch (error) {
+    toast.error((error.message || error.error) ?? 'Something went wrong');
     throw error;
   }
 }
@@ -82,6 +87,8 @@ export async function updateBanner(bannerID: string | number, payload: updateBan
 
     if (response.status === 200) {
       toast.success('Updated successfuly');
+
+      mutate(BANNER_ENDPOINT.list);
     }
     return response;
   } catch (error) {
@@ -102,6 +109,7 @@ export async function deleteBanner(bannerID: string | number) {
 
     if (response.status === 200) {
       toast.success('deleted successfuly');
+      mutate(BANNER_ENDPOINT.list);
     }
     return response;
   } catch (error) {
