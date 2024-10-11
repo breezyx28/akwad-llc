@@ -50,6 +50,8 @@ import { _brandList } from 'src/_mock/_brand';
 import { BrandTableRow } from '../brand-table-row';
 import { AddBrandFormDialog } from '../add-brand-form-dialog';
 import { useGetBrands } from 'src/actions/brands';
+import DatePickerButton from 'src/components/button/date-button';
+import { Stack } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -154,7 +156,12 @@ export function BrandListView() {
             { name: 'Brand', href: paths.dashboard.brand.root },
             { name: 'List' },
           ]}
-          action={<AddBrandFormDialog />}
+          action={
+            <Stack direction={'row'} gap={'1rem'}>
+              <DatePickerButton />
+              <AddBrandFormDialog />
+            </Stack>
+          }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 

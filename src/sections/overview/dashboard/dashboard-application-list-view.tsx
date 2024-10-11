@@ -58,7 +58,6 @@ const TABLE_HEAD = [
   { id: 'numberOfSessions', label: 'Number of sessions', width: 220 },
   { id: 'visits', label: 'Visits', width: 180 },
   { id: 'usageProcesses', label: 'Usage processes', width: 100 },
-  // { id: '', width: 88 },
 ];
 
 // ----------------------------------------------------------------------

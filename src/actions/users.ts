@@ -54,7 +54,7 @@ type uploadImagePayload = {
   image: any;
 };
 
-export async function uploadImage(payload: uploadImagePayload) {
+export async function uploadImage(payload: uploadImagePayload | any) {
   try {
     const response = await axios.post(USER_ENDPOINT.uploadImage, payload, {
       headers: {

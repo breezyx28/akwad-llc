@@ -44,6 +44,8 @@ import { BannerTableRow } from '../banner-table-row';
 import { AddBannerFormDialog } from '../add-banner-form-dialog';
 import { useGetBanners } from 'src/actions/banners';
 import { IBannerItem, IBannerTableFilters } from 'src/types/banner';
+import { Stack } from '@mui/material';
+import DatePickerButton from 'src/components/button/date-button';
 
 // ----------------------------------------------------------------------
 
@@ -137,13 +139,18 @@ export function BannersListView() {
     <>
       <DashboardContent>
         <CustomBreadcrumbs
-          heading="List"
+          heading="Banner"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
             { name: 'Brand', href: paths.dashboard.brand.root },
             { name: 'Banner' },
           ]}
-          action={<AddBannerFormDialog />}
+          action={
+            <Stack direction={'row'} gap={'1rem'}>
+              <DatePickerButton />
+              <AddBannerFormDialog />
+            </Stack>
+          }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 

@@ -11,17 +11,24 @@ import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled } f
 import { useMockedUser } from 'src/auth/hooks';
 
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { CONFIG } from 'src/config-global';
 import { DashboardTopPerformance } from '../dashboard-top-performance';
 import { DashboardApplicationsListView } from '../dashboard-application-list-view';
 import { TotalIntallsOverview } from '../total-installs-overview';
+import { Iconify } from 'src/components/iconify';
+import DatePickerButton from 'src/components/button/date-button';
 
 // ----------------------------------------------------------------------
 
 export function OverviewDashboardView() {
   return (
     <DashboardContent maxWidth="xl">
+      <Stack direction="row" sx={{ width: '100%' }}>
+        <Box display={'flex'} justifyContent={'end'} sx={{ flexGrow: 1 }}>
+          <DatePickerButton />
+        </Box>
+      </Stack>
       <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
         Hi, Welcome back 👋
       </Typography>

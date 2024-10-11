@@ -42,6 +42,7 @@ import {
 import { UserSuggestionsTableRow } from '../user-suggestions-table-row';
 import { useGetUserSuggestions } from 'src/actions/user-suggestions';
 import { IUserSuggestionsItem, IUserSuggestionsTableFilters } from 'src/types/user-suggestions';
+import DatePickerButton from 'src/components/button/date-button';
 
 // ----------------------------------------------------------------------
 
@@ -93,16 +94,7 @@ export function UserSuggestionsListView() {
             { name: 'User', href: paths.dashboard.users.root },
             { name: 'User Suggestions' },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={'#'}
-              variant="soft"
-              endIcon={<Iconify icon="solar:calendar-mark-bold-duotone" />}
-            >
-              This month
-            </Button>
-          }
+          action={<DatePickerButton />}
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 

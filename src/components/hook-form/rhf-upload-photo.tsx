@@ -35,16 +35,17 @@ export function RHFUploadPhoto({ name, ...other }: Props) {
         const onDrop = async (acceptedFiles: File[]) => {
           const value = acceptedFiles[0];
 
+          let image: FormData = new FormData();
+
           setValue(name, value, { shouldValidate: true });
 
-          // upload image to the server
-          const response = await uploadImage({
-            image: value,
-          });
+          image.append('image', value);
 
-          if (response) {
+          const response = await uploadImage(image);
+
+          if (response.status == 200) {
             setUploaded(response);
-            setValue(name, value, { shouldValidate: true });
+            setValue(name, response.data?.url, { shouldValidate: true });
           }
         };
 

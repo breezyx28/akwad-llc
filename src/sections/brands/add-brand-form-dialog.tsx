@@ -69,12 +69,6 @@ export function AddBrandFormDialog() {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
-
-  if (values?.image) {
-    console.log('watching-image: ', values?.image);
-  }
-
   const onSubmit = handleSubmit(async (data) => {
     try {
       const response = await addBrand(data);
@@ -98,11 +92,11 @@ export function AddBrandFormDialog() {
         variant="contained"
         startIcon={<Iconify icon="mingcute:add-line" />}
       >
-        Add Brands
+        Add Brand
       </Button>
 
       <Dialog fullWidth={true} maxWidth={'md'} open={dialog.value} onClose={dialog.onFalse}>
-        <DialogTitle>Add Brands</DialogTitle>
+        <DialogTitle>Add Brand</DialogTitle>
 
         <DialogContent>
           <Form methods={methods} onSubmit={onSubmit}>

@@ -42,6 +42,7 @@ import {
 import { SearchLogsTableRow } from '../search-logs-table-row';
 import { ISearchLogsItem, ISearchLogsTableFilters } from 'src/types/search-logs';
 import { useGetSearchLogs } from 'src/actions/search-logs';
+import DatePickerButton from 'src/components/button/date-button';
 
 // ----------------------------------------------------------------------
 
@@ -92,16 +93,7 @@ export function SearchLogsListView() {
             { name: 'User', href: paths.dashboard.users.root },
             { name: 'Search Logs' },
           ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={'#'}
-              variant="soft"
-              endIcon={<Iconify icon="solar:calendar-mark-bold-duotone" />}
-            >
-              This month
-            </Button>
-          }
+          action={<DatePickerButton />}
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 

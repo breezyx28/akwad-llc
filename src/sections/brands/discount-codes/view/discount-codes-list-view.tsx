@@ -47,6 +47,8 @@ import { DiscountCodesTableFiltersResult } from '../discount-codes-table-filters
 import { AddDiscountCodeFormDialog } from '../add-discount-code-form-dialog';
 import { IDiscountCodeItem, IDiscountCodeTableFilters } from 'src/types/discount-code';
 import { useGetDiscountCodes } from 'src/actions/discount-codes';
+import { Stack } from '@mui/material';
+import DatePickerButton from 'src/components/button/date-button';
 
 // ----------------------------------------------------------------------
 
@@ -148,10 +150,15 @@ export function DiscountCodesListView() {
           heading="Discount Codes"
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'Users', href: paths.dashboard.users.root },
+            { name: 'Brand', href: paths.dashboard.brand.root },
             { name: 'discount Codes' },
           ]}
-          action={<AddDiscountCodeFormDialog />}
+          action={
+            <Stack direction={'row'} gap={'1rem'}>
+              <DatePickerButton />
+              <AddDiscountCodeFormDialog />
+            </Stack>
+          }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
