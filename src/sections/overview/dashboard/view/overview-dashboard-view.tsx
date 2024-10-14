@@ -26,13 +26,15 @@ export function OverviewDashboardView() {
 
   // Memoize the handleDateChange function using useCallback
   const handleDateChange = useCallback(async (startDate: string | null, endDate: string | null) => {
+    let url = startDate && endDate ? `start_date=${startDate}&end_date=${endDate}` : '';
+
     try {
-      let topSearchData = await getTopSearchSSR(`start_date=${startDate}&end_date=${endDate}`);
+      let topSearchData = await getTopSearchSSR(url);
       if (topSearchData) {
         setTopSearch(topSearchData);
       }
 
-      let topBrandsData = await getTopBrandsSSR(`start_date=${startDate}&end_date=${endDate}`);
+      let topBrandsData = await getTopBrandsSSR(url);
       if (topBrandsData) {
         setTopBrands(topBrandsData);
       }
