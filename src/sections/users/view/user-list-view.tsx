@@ -97,8 +97,9 @@ export function UserListView() {
   }, [users]);
 
   const handleDateChange = useCallback(async (startDate: string | null, endDate: string | null) => {
+    let url = startDate && endDate ? `start_date=${startDate}&end_date=${endDate}` : '';
     if (startDate && endDate) {
-      const data = await getUsersSSR(`start_date=${startDate}&end_date=${endDate}`);
+      const data = await getUsersSSR(url);
 
       if (data) {
         setTableData(data);
