@@ -45,7 +45,10 @@ import {
 
 import { UserTableRow } from '../user-table-row';
 import { IUsersItem, IUsersTableFilters } from 'src/types/users';
-import { useGetUsers } from 'src/actions/users';
+import { useGetUsers, USER_ENDPOINT } from 'src/actions/users';
+import DatePickerButton from 'src/components/button/date-button';
+import useWatchQueryParams from 'src/hooks/use-watch-query-params';
+import { authedFetcher } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -93,6 +96,16 @@ export function UserListView() {
     }
   }, [users]);
 
+  const handleDateChange = useCallback(async (startDate: string | null, endDate: string | null) => {
+    if (startDate && endDate) {
+      const data = await getUsersSSR(`start_date=${startDate}&end_date=${endDate}`);
+
+      if (data) {
+        setTableData(data);
+      }
+    }
+  }, []);
+
   return (
     <>
       <DashboardContent>
@@ -103,6 +116,7 @@ export function UserListView() {
             { name: 'Users', href: paths.dashboard.users.root },
             { name: 'List' },
           ]}
+          action={<DatePickerButton onDateChange={handleDateChange} />}
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
@@ -225,4 +239,19 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
   }
 
   return inputData;
+}
+
+async function getUsersSSR(dateData: any) {
+  const config = {};
+
+  const url = `${USER_ENDPOINT.list}?${dateData}`;
+
+  try {
+    const data = await authedFetcher([url, config]); // Await the result
+    // console.log('Fetched data:', data); // Use the fetched data
+    return data?.data ?? [];
+  } catch (error) {
+    toast.error(error.error || error.message || 'something went wrong');
+    console.error('Error fetching data:', error); // Handle any error
+  }
 }

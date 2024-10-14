@@ -1,11 +1,12 @@
 import useSWR, { mutate } from 'swr';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
 import { IBrandItem } from 'src/types/brand';
 import { getAccessToken } from 'src/auth/context/sanctum';
 import { IDiscountCodeItem } from 'src/types/discount-code';
 import { toast } from 'sonner';
+import useWatchQueryParams from 'src/hooks/use-watch-query-params';
 
 // ----------------------------------------------------------------------
 
@@ -26,8 +27,27 @@ type DiscountCodesData = {
   data: IDiscountCodeItem[];
 };
 
+type DiscountCodesParams = {
+  start_date?: string;
+  end_date?: string;
+};
+
 export function useGetDiscountCodes() {
-  const url = endpoints.brands.codes.list;
+  let params = null;
+  let url = DISCOUNT_CODE_ENDPOINT.list;
+
+  const { end_date, start_date } = useWatchQueryParams();
+
+  React.useEffect(() => {
+    if (end_date && start_date) {
+      params = {
+        start_date,
+        end_date,
+      };
+      const queryParams = new URLSearchParams(params).toString();
+      url = `${DISCOUNT_CODE_ENDPOINT.list}?${queryParams}`;
+    }
+  }, [start_date, end_date]);
 
   const { data, isLoading, error, isValidating } = useSWR<DiscountCodesData>(
     url,

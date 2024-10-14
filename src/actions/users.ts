@@ -1,6 +1,6 @@
 import type { IPostItem } from 'src/types/blog';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import useSWR, { mutate } from 'swr';
 import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
 import { IUsersItem } from 'src/types/users';
@@ -8,6 +8,7 @@ import { getAccessToken } from 'src/auth/context/sanctum';
 import { BRAND_ENDPOINT } from './brands';
 import { BANNER_ENDPOINT } from './banners';
 import { toast } from 'sonner';
+import useWatchQueryParams from 'src/hooks/use-watch-query-params';
 
 // ----------------------------------------------------------------------
 
@@ -25,8 +26,18 @@ type UsersData = {
   data: IUsersItem[];
 };
 
+type UsersParams = {
+  start_date?: string;
+  end_date?: string;
+};
+
 export function useGetUsers() {
-  const url = USER_ENDPOINT.list;
+  const [url, setUrl] = useState<any>(USER_ENDPOINT.list);
+
+  // Custom function to update the date range and trigger a refetch
+  const setNewUrl = useCallback((url: string) => {
+    setUrl(url);
+  }, []);
 
   const { data, isLoading, error, isValidating } = useSWR<UsersData>(
     url,
@@ -41,6 +52,7 @@ export function useGetUsers() {
       usersError: error,
       usersValidating: isValidating,
       usersEmpty: !isLoading && !data?.data.length,
+      setNewUrl,
     }),
     [data?.data, error, isLoading, isValidating]
   );

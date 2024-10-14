@@ -22,8 +22,19 @@ type ApplicationsData = {
   data: IApplicationItem[];
 };
 
-export function useGetApplications() {
-  const url = APPLICATION_ENDPOINT.list;
+type ApplicationsParams = {
+  start_date?: string;
+  end_date?: string;
+};
+
+export function useGetApplications(params?: ApplicationsParams) {
+  // Build query string from params
+  const queryParams = new URLSearchParams(params).toString();
+
+  // Append query string to the endpoint URL
+  const url = queryParams
+    ? `${APPLICATION_ENDPOINT.list}?${queryParams}`
+    : APPLICATION_ENDPOINT.list;
 
   const { data, isLoading, error, isValidating } = useSWR<ApplicationsData>(
     url,

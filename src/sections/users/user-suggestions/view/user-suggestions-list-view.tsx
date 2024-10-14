@@ -40,9 +40,12 @@ import {
 } from 'src/components/table';
 
 import { UserSuggestionsTableRow } from '../user-suggestions-table-row';
-import { useGetUserSuggestions } from 'src/actions/user-suggestions';
+import { useGetUserSuggestions, USER_SUGGESTIONS_ENDPOINT } from 'src/actions/user-suggestions';
 import { IUserSuggestionsItem, IUserSuggestionsTableFilters } from 'src/types/user-suggestions';
 import DatePickerButton from 'src/components/button/date-button';
+import { Dayjs } from 'dayjs';
+import useSWR, { mutate } from 'swr';
+import { authedFetcher, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -55,8 +58,6 @@ const TABLE_HEAD = [
 
 export function UserSuggestionsListView() {
   const { userSuggestions } = useGetUserSuggestions();
-
-  console.log('user-suggestions-data: ', userSuggestions);
 
   const table = useTable();
 
@@ -74,6 +75,8 @@ export function UserSuggestionsListView() {
     }
   }, [userSuggestions]);
 
+  //
+
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
@@ -83,6 +86,16 @@ export function UserSuggestionsListView() {
   const canReset = !!filters.state.name || !!filters.state.count;
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+
+  const handleDateChange = useCallback(async (startDate: string | null, endDate: string | null) => {
+    if (startDate && endDate) {
+      const data = await getUserSuggestionsSSR(`start_date=${startDate}&end_date=${endDate}`);
+
+      if (data) {
+        setTableData(data);
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -94,7 +107,7 @@ export function UserSuggestionsListView() {
             { name: 'User', href: paths.dashboard.users.root },
             { name: 'User Suggestions' },
           ]}
-          action={<DatePickerButton />}
+          action={<DatePickerButton onDateChange={handleDateChange} />}
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
@@ -209,4 +222,19 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
   }
 
   return inputData;
+}
+
+async function getUserSuggestionsSSR(dateData: any) {
+  const config = {};
+
+  const url = `${USER_SUGGESTIONS_ENDPOINT.list}?${dateData}`;
+
+  try {
+    const data = await authedFetcher([url, config]); // Await the result
+    // console.log('Fetched data:', data); // Use the fetched data
+    return data?.data ?? [];
+  } catch (error) {
+    toast.error(error.error || error.message || 'something went wrong');
+    console.error('Error fetching data:', error); // Handle any error
+  }
 }

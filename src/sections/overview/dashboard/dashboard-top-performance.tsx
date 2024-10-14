@@ -1,3 +1,4 @@
+'use client';
 import type { BoxProps } from '@mui/material/Box';
 import type { CardProps } from '@mui/material/Card';
 
@@ -19,7 +20,11 @@ import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { CustomTabs } from 'src/components/custom-tabs';
-import { _topSearch } from 'src/_mock';
+import { _mock, _topSearch } from 'src/_mock';
+import { SEARCH_LOGS_ENDPOINT } from 'src/actions/search-logs';
+import { authedFetcher } from 'src/utils/axios';
+import { toast } from 'sonner';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +35,16 @@ const TABS = [
 ];
 
 // ----------------------------------------------------------------------
+
+type SearchItem = {
+  name: string;
+  count: number | number;
+};
+type BrandItem = {
+  brand_name: string;
+  brand_id: number;
+  total_opens: number;
+};
 
 type Props = CardProps & {
   title?: string;
@@ -44,12 +59,16 @@ type Props = CardProps & {
     ratingNumber: number;
     totalReviews: number;
   }[];
+  top?: {
+    brands?: Array<Record<string, unknown>> | [];
+    search?: SearchItem[] | [];
+  };
 };
 type TopSearchProps = CardProps & {
   title?: string;
   subheader?: string;
   list: {
-    id: string | number;
+    id?: string | number;
     name: string;
     count: number;
   }[];
@@ -69,7 +88,7 @@ type TopCategoriesProps = CardProps & {
   }[];
 };
 
-export function DashboardTopPerformance({ title, subheader, list, ...other }: Props) {
+export function DashboardTopPerformance({ title, subheader, list, top, ...other }: Props) {
   const tabs = useTabs('brands');
 
   const renderTabs = (
@@ -94,16 +113,14 @@ export function DashboardTopPerformance({ title, subheader, list, ...other }: Pr
       <Scrollbar sx={{ minHeight: 384 }}>
         {tabs.value === 'brands' && (
           <Box sx={{ p: 3, gap: 3, minWidth: 360, display: 'flex', flexDirection: 'column' }}>
-            {list.map((item) => (
-              <TopBrandsItem key={item.id} item={item} />
+            {top?.brands?.map((item) => (
+              <TopBrandsItem key={item.brand_id as any} item={item as any} />
             ))}
           </Box>
         )}
         {tabs.value === 'search' && (
           <Box sx={{ p: 3, gap: 6, minWidth: 360, display: 'flex', flexDirection: 'column' }}>
-            {_topSearch.map((item) => (
-              <TopSearchsItem key={item.id} item={item} />
-            ))}
+            {top?.search?.map((item, index) => <TopSearchsItem key={index} item={item} />)}
           </Box>
         )}
         {tabs.value === 'categories' && (
@@ -121,7 +138,7 @@ export function DashboardTopPerformance({ title, subheader, list, ...other }: Pr
 // ----------------------------------------------------------------------
 
 type ItemProps = BoxProps & {
-  item: Props['list'][number];
+  item: BrandItem;
 };
 
 function TopBrandsItem({ item, sx, ...other }: ItemProps) {
@@ -129,7 +146,7 @@ function TopBrandsItem({ item, sx, ...other }: ItemProps) {
     <Box sx={{ gap: 2, display: 'flex', alignItems: 'center', ...sx }} {...other}>
       <Avatar
         variant="rounded"
-        src={item.shortcut}
+        src={_mock.image.avatar(item.brand_id)}
         sx={{
           p: 1,
           width: 48,
@@ -141,12 +158,12 @@ function TopBrandsItem({ item, sx, ...other }: ItemProps) {
       <div>
         <Box sx={{ mb: 1, gap: 1, display: 'flex', alignItems: 'center' }}>
           <Typography variant="subtitle2" noWrap>
-            {item.name}
+            {item.brand_name}
           </Typography>
 
-          <Label color={item.price === 0 ? 'default' : 'success'} sx={{ height: 20 }}>
+          {/* <Label color={item.price === 0 ? 'default' : 'success'} sx={{ height: 20 }}>
             {item.price === 0 ? 'Free' : fCurrency(item.price)}
-          </Label>
+          </Label> */}
         </Box>
 
         <Stack
@@ -160,13 +177,13 @@ function TopBrandsItem({ item, sx, ...other }: ItemProps) {
         >
           <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
             <Iconify width={16} icon="solar:download-bold" sx={{ color: 'text.disabled' }} />
-            {fShortenNumber(item.downloaded)}
+            {fShortenNumber(item.total_opens)}
           </Box>
 
-          <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
+          {/* <Box sx={{ gap: 0.5, display: 'flex', alignItems: 'center' }}>
             <Iconify width={16} icon="heroicons:server-solid" sx={{ color: 'text.disabled' }} />
             {fData(item.size)}
-          </Box>
+          </Box> */}
         </Stack>
       </div>
     </Box>
@@ -176,10 +193,10 @@ function TopBrandsItem({ item, sx, ...other }: ItemProps) {
 // ----------------------------------------------------------------------
 
 type TopSearchItemProps = BoxProps & {
-  item: TopSearchProps['list'][number];
+  item: SearchItem;
 };
 
-function TopSearchsItem({ item, sx, ...other }: TopSearchItemProps) {
+function TopSearchsItem({ key, item, sx, ...other }: TopSearchItemProps) {
   return (
     <Box
       sx={{
@@ -192,7 +209,7 @@ function TopSearchsItem({ item, sx, ...other }: TopSearchItemProps) {
     >
       <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
         <Typography variant="caption" noWrap>
-          #{item.id}
+          #{key}
         </Typography>
         <Typography variant="subtitle2" noWrap>
           {item.name}

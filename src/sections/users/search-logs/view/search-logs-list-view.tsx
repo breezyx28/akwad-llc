@@ -41,8 +41,9 @@ import {
 
 import { SearchLogsTableRow } from '../search-logs-table-row';
 import { ISearchLogsItem, ISearchLogsTableFilters } from 'src/types/search-logs';
-import { useGetSearchLogs } from 'src/actions/search-logs';
+import { SEARCH_LOGS_ENDPOINT, useGetSearchLogs } from 'src/actions/search-logs';
 import DatePickerButton from 'src/components/button/date-button';
+import { authedFetcher } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -83,6 +84,16 @@ export function SearchLogsListView() {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
+  const handleDateChange = useCallback(async (startDate: string | null, endDate: string | null) => {
+    if (startDate && endDate) {
+      const data = await getSearchLogsSSR(`start_date=${startDate}&end_date=${endDate}`);
+
+      if (data) {
+        setTableData(data);
+      }
+    }
+  }, []);
+
   return (
     <>
       <DashboardContent>
@@ -93,7 +104,7 @@ export function SearchLogsListView() {
             { name: 'User', href: paths.dashboard.users.root },
             { name: 'Search Logs' },
           ]}
-          action={<DatePickerButton />}
+          action={<DatePickerButton onDateChange={handleDateChange} />}
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
@@ -208,4 +219,19 @@ function applyFilter({ inputData, comparator, filters }: ApplyFilterProps) {
   }
 
   return inputData;
+}
+
+async function getSearchLogsSSR(dateData: any) {
+  const config = {};
+
+  const url = `${SEARCH_LOGS_ENDPOINT.list}?${dateData}`;
+
+  try {
+    const data = await authedFetcher([url, config]); // Await the result
+    // console.log('Fetched data:', data); // Use the fetched data
+    return data?.data ?? [];
+  } catch (error) {
+    toast.error(error.error || error.message || 'something went wrong');
+    console.error('Error fetching data:', error); // Handle any error
+  }
 }

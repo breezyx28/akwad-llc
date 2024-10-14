@@ -93,6 +93,7 @@ export const endpoints = {
   brands: {
     banners: {
       list: '/api/brand/banner/index',
+      top: '/api/brand/banner/index',
       store: '/api/brand/banner/store',
       edit: '/api/brand/banner/edit/',
       delete: '/api/brand/banner/delete/',
@@ -109,6 +110,7 @@ export const endpoints = {
       searchByStatus: '/api/brand/code/search?type=2',
     },
     list: '/api/brand/index',
+    top: '/api/brand/top_brands',
     store: '/api/brand/store',
     edit: '/api/brand/edit/',
     delete: '/api/brand/delete/',
@@ -124,6 +126,7 @@ export const endpoints = {
     },
     searchLogs: {
       list: '/api/user/searchlogs/index',
+      top: '/api/user/searchlogs/top',
       store: '/api/user/searchlogs/store',
     },
     list: '/api/user/index',
