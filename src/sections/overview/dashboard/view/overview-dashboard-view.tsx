@@ -15,6 +15,7 @@ import { SEARCH_LOGS_ENDPOINT } from 'src/actions/search-logs';
 import { BRAND_ENDPOINT } from 'src/actions/brands';
 import { toast } from 'sonner';
 import { authedFetcher } from 'src/utils/axios';
+import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
 
 // ----------------------------------------------------------------------
 

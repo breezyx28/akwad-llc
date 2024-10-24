@@ -23,6 +23,7 @@ import { usePopover, CustomPopover } from 'src/components/custom-popover';
 import { IBannerItem } from 'src/types/banner';
 import { UpdateBannerFormDialog } from './update-banner-form-dialog';
 import { deleteBanner } from 'src/actions/banners';
+import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
 
 // ----------------------------------------------------------------------
 
@@ -61,7 +62,7 @@ export function BannerTableRow({ row, selected, onEditRow, onSelectRow, onDelete
 
             <Stack sx={{ typography: 'body2', flex: '1 1 auto', alignItems: 'flex-start' }}>
               <Link color="inherit" onClick={onEditRow} sx={{ cursor: 'pointer' }}>
-                {row.brand?.name}
+                {convertTextToAppleEmoji(row.brand?.name as string)}
               </Link>
               {/* <Box component="span" sx={{ color: 'text.disabled' }}>
                 {row.email}
@@ -70,7 +71,7 @@ export function BannerTableRow({ row, selected, onEditRow, onSelectRow, onDelete
           </Stack>
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.type}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{convertTextToAppleEmoji(row.type)}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.link}</TableCell>
 

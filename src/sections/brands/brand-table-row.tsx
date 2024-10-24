@@ -27,6 +27,7 @@ import { deleteBrand, updateBrandStatus } from 'src/actions/brands';
 import { useState } from 'react';
 import { UpdateBrandFormDialog } from './update-brand-form-dialog';
 import { toast } from 'sonner';
+import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
 
 // ----------------------------------------------------------------------
 
@@ -111,7 +112,7 @@ export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteR
             textOverflow: 'ellipsis',
           }}
         >
-          {row.description}
+          {convertTextToAppleEmoji(row.description)}
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>

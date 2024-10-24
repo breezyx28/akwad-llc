@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
+    "downlevelIteration": true,
     "baseUrl": ".",
-    "target": "es5",
-    "lib": [
-      "dom",
-      "esnext",
-      "dom.iterable",
-    ],
+    "target": "es2015",
+    // "target": "es5",
+    "lib": ["dom", "esnext", "dom.iterable"],
     "strict": true,
     "noEmit": true,
     "allowJs": true,
@@ -31,13 +29,6 @@
       }
     ]
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

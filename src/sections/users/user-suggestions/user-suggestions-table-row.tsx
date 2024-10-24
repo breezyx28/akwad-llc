@@ -2,6 +2,7 @@ import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import { ISearchLogsItem } from 'src/types/search-logs';
+import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +20,7 @@ export function UserSuggestionsTableRow({ row, selected, onSelectRow }: Props) {
           <Checkbox id={row.name} checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.name}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{convertTextToAppleEmoji(row.name)}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.count}</TableCell>
       </TableRow>

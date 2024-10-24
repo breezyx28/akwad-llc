@@ -24,6 +24,7 @@ import { IDiscountCodeItem } from 'src/types/discount-code';
 import { UpdateDiscountCodeFormDialog } from './update-discount-code-form-dialog';
 import { deleteDiscountCode } from 'src/actions/discount-codes';
 import { toast } from 'sonner';
+import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
 
 // ----------------------------------------------------------------------
 
@@ -77,11 +78,13 @@ export function DiscountCodeTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.name}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{convertTextToAppleEmoji(row.name)}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.coupon}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.description}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>
+          {convertTextToAppleEmoji(row.description)}
+        </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>
           {row.status === 0 ? 'Non-Varibale' : 'Variable'}
