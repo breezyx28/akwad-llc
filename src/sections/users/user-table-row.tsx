@@ -22,6 +22,7 @@ import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
 import { UserQuickEditForm } from './user-quick-edit-form';
 import { IUsersItem } from 'src/types/users';
+import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ export function UserTableRow({ row, selected, onSelectRow }: Props) {
 
             <Stack sx={{ typography: 'body2', flex: '1 1 auto', alignItems: 'flex-start' }}>
               <Link color="inherit" sx={{ cursor: 'pointer' }}>
-                {row.name}
+                {convertTextToAppleEmoji(row.name)}
               </Link>
               <Box component="span" sx={{ color: 'text.disabled' }}>
                 {row.email}
