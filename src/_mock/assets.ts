@@ -333,7 +333,12 @@ export const _brandFilter = [
     applications: [`Awan Company`, `Fintech Company`, `Amndas Company`],
   },
   {
-    categories: [`Restaurants 🍔`, `Shopping 🛍️`, `Stores 🛒`, `Electronics 🖥️ `],
+    categories: [
+      convertTextToAppleEmoji(`Restaurants 🍔`),
+      convertTextToAppleEmoji(`Shopping 🛍️`),
+      convertTextToAppleEmoji(`Stores 🛒`),
+      convertTextToAppleEmoji(`Electronics 🖥️`),
+    ],
   },
   {
     status: [convertTextToAppleEmoji(`Active ✅`), convertTextToAppleEmoji(`Inactive 😴`)],
@@ -345,7 +350,12 @@ export const _discountCodesFilter = [
     applications: [`Awan Company`, `Fintech Company`, `Amndas Company`],
   },
   {
-    categories: [`Restaurants 🍔`, `Shopping 🛍️`, `Stores 🛒`, `Electronics 🖥️ `],
+    categories: [
+      convertTextToAppleEmoji(`Restaurants 🍔`),
+      convertTextToAppleEmoji(`Shopping 🛍️`),
+      convertTextToAppleEmoji(`Stores 🛒`),
+      convertTextToAppleEmoji(`Electronics 🖥️`),
+    ],
   },
   {
     status: [`Variable ✅`, `None-Variable 😴`],

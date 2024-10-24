@@ -60,7 +60,7 @@ export function convertTextToAppleEmoji(text: string): (string | JSX.Element)[] 
             width: '1em',
             height: '1em',
             display: 'inline',
-            // verticalAlign: 'middle',
+            verticalAlign: 'middle',
             margin: '0 0.1em',
           }}
         />
