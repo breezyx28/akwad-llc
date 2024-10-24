@@ -11,7 +11,7 @@ interface Emoji {
 // Utility to convert the emoji unified code to an Apple image URL
 function emojiToAppleImage(unified: string): string {
   const emojiUnified = unified.toLowerCase().replace(/-/g, '');
-  return `https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.1.2/img/apple/64/${emojiUnified}.png`;
+  return `/emoji/img/apple/64/${emojiUnified}.png`;
 }
 
 // Create a map from emoji unicode to the Apple emoji image URL
