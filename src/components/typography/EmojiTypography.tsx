@@ -1,5 +1,9 @@
-import { Typography, TypographyProps } from '@mui/material';
+import type { TypographyProps } from '@mui/material';
+
 import React from 'react';
+
+import { Typography } from '@mui/material';
+
 import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
 
 // Wrapper component to apply emoji conversion

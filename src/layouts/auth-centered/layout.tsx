@@ -6,7 +6,6 @@ import Alert from '@mui/material/Alert';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { CONFIG } from 'src/config-global';
 import { stylesMode } from 'src/theme/styles';
 
 import { Main } from './main';

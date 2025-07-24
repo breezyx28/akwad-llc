@@ -1,10 +1,10 @@
-import type { IUserItem } from 'src/types/user';
+
+import type { IBrandItem } from 'src/types/brand';
 
 import { z as zod } from 'zod';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { isValidPhoneNumber } from 'react-phone-number-input/input';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
@@ -19,8 +19,7 @@ import DialogContent from '@mui/material/DialogContent';
 import { USER_STATUS_OPTIONS } from 'src/_mock';
 
 import { toast } from 'src/components/snackbar';
-import { Form, Field, schemaHelper } from 'src/components/hook-form';
-import { IBrandItem } from 'src/types/brand';
+import { Form, Field } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 

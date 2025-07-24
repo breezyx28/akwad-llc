@@ -1,9 +1,10 @@
-import useSWR, { mutate } from 'swr';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import axiosInstance, { authedFetcher, endpoints } from 'src/utils/axios';
-import { IUserSuggestionsItem } from 'src/types/user-suggestions';
-import { getAccessToken } from 'src/auth/context/sanctum';
+import type { IUserSuggestionsItem } from 'src/types/user-suggestions';
+
+import useSWR from 'swr';
 import { toast } from 'sonner';
+import { useMemo, useState, useCallback } from 'react';
+
+import { endpoints, authedFetcher } from 'src/utils/axios';
 
 type UserSuggestionsData = {
   data: IUserSuggestionsItem[];

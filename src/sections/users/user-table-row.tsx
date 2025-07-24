@@ -1,28 +1,19 @@
-import type { IUserItem } from 'src/types/user';
+
+import type { IUsersItem } from 'src/types/users';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
-import MenuList from '@mui/material/MenuList';
-import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import { useBoolean } from 'src/hooks/use-boolean';
-
-import { Label } from 'src/components/label';
-import { Iconify } from 'src/components/iconify';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { usePopover, CustomPopover } from 'src/components/custom-popover';
-
-import { UserQuickEditForm } from './user-quick-edit-form';
-import { IUsersItem } from 'src/types/users';
 import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
+
+import { Iconify } from 'src/components/iconify';
+import { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
@@ -38,8 +29,7 @@ export function UserTableRow({ row, selected, onSelectRow }: Props) {
   const popover = usePopover();
 
   return (
-    <>
-      <TableRow hover selected={selected} aria-checked={selected} tabIndex={-1}>
+    <TableRow hover selected={selected} aria-checked={selected} tabIndex={-1}>
         <TableCell padding="checkbox">
           <Checkbox id={row.id as any} checked={selected} onClick={onSelectRow} />
         </TableCell>
@@ -65,11 +55,11 @@ export function UserTableRow({ row, selected, onSelectRow }: Props) {
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.age}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{'Hands'}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>Hands</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{'Hands 2'}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>Hands 2</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{'not set'}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>not set</TableCell>
 
         <TableCell>
           <Stack direction="row" alignItems="center">
@@ -82,6 +72,5 @@ export function UserTableRow({ row, selected, onSelectRow }: Props) {
           </Stack>
         </TableCell>
       </TableRow>
-    </>
   );
 }

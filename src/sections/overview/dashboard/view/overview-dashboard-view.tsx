@@ -1,21 +1,24 @@
 'use client';
-import Box from '@mui/material/Box';
-import { useTheme } from '@mui/material/styles';
-import Grid from '@mui/material/Unstable_Grid2';
+
+import { toast } from 'sonner';
 import { useState, useCallback } from 'react';
+
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Unstable_Grid2';
 import { Stack, Typography } from '@mui/material';
+
+import { authedFetcher } from 'src/utils/axios';
+
+import { BRAND_ENDPOINT } from 'src/actions/brands';
 import { DashboardContent } from 'src/layouts/dashboard';
+import { SEARCH_LOGS_ENDPOINT } from 'src/actions/search-logs';
+
+import DatePickerButton from 'src/components/button/date-button';
+
+import { TotalIntallsOverview } from '../total-installs-overview';
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 import { DashboardTopPerformance } from '../dashboard-top-performance';
 import { DashboardApplicationsListView } from '../dashboard-application-list-view';
-import { TotalIntallsOverview } from '../total-installs-overview';
-import { Iconify } from 'src/components/iconify';
-import DatePickerButton from 'src/components/button/date-button';
-import { SEARCH_LOGS_ENDPOINT } from 'src/actions/search-logs';
-import { BRAND_ENDPOINT } from 'src/actions/brands';
-import { toast } from 'sonner';
-import { authedFetcher } from 'src/utils/axios';
-import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
 
 // ----------------------------------------------------------------------
 
@@ -27,15 +30,15 @@ export function OverviewDashboardView() {
 
   // Memoize the handleDateChange function using useCallback
   const handleDateChange = useCallback(async (startDate: string | null, endDate: string | null) => {
-    let url = startDate && endDate ? `start_date=${startDate}&end_date=${endDate}` : '';
+    const url = startDate && endDate ? `start_date=${startDate}&end_date=${endDate}` : '';
 
     try {
-      let topSearchData = await getTopSearchSSR(url);
+      const topSearchData = await getTopSearchSSR(url);
       if (topSearchData) {
         setTopSearch(topSearchData);
       }
 
-      let topBrandsData = await getTopBrandsSSR(url);
+      const topBrandsData = await getTopBrandsSSR(url);
       if (topBrandsData) {
         setTopBrands(topBrandsData);
       }
@@ -47,7 +50,7 @@ export function OverviewDashboardView() {
   return (
     <DashboardContent maxWidth="xl">
       <Stack direction="row" sx={{ width: '100%' }}>
-        <Box display={'flex'} justifyContent={'end'} sx={{ flexGrow: 1 }}>
+        <Box display="flex" justifyContent="end" sx={{ flexGrow: 1 }}>
           <DatePickerButton onDateChange={handleDateChange} />
         </Box>
       </Stack>
@@ -61,7 +64,7 @@ export function OverviewDashboardView() {
             title="Sessions"
             percent={2.6}
             total={714000}
-            icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-message.svg`} />}
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-message.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [22, 8, 35, 50, 82, 84, 77, 12],
@@ -75,7 +78,7 @@ export function OverviewDashboardView() {
             percent={-0.1}
             total={1352831}
             color="secondary"
-            icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-unique-users.svg`} />}
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-unique-users.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [56, 47, 40, 62, 73, 30, 23, 54],
@@ -89,7 +92,7 @@ export function OverviewDashboardView() {
             percent={2.8}
             total={1723315}
             color="warning"
-            icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-registered-users.svg`} />}
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-registered-users.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [40, 70, 50, 28, 70, 75, 7, 64],
@@ -103,7 +106,7 @@ export function OverviewDashboardView() {
             percent={3.6}
             total={234}
             color="error"
-            icon={<img alt="icon" src={`/assets/icons/glass/ic-glass-bag.svg`} />}
+            icon={<img alt="icon" src="/assets/icons/glass/ic-glass-bag.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [56, 30, 23, 54, 47, 40, 62, 73],

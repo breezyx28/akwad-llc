@@ -1,11 +1,12 @@
 'use client';
 
+import type { IDiscountCodeItem, IDiscountCodeTableFilters } from 'src/types/discount-code';
+
 import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
+import { Stack } from '@mui/material';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
@@ -14,20 +15,19 @@ import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
-import { varAlpha } from 'src/theme/styles';
+import { _discountCodesFilter } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _discountCodesFilter, _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
+import { useGetDiscountCodes } from 'src/actions/discount-codes';
 
-import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import DatePickerButton from 'src/components/button/date-button';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -43,12 +43,8 @@ import {
 
 import { DiscountCodeTableRow } from '../discount-code-table-row';
 import { DiscountCodeTableToolbar } from '../discount-table-toolbar';
-import { DiscountCodesTableFiltersResult } from '../discount-codes-table-filters-result';
 import { AddDiscountCodeFormDialog } from '../add-discount-code-form-dialog';
-import { IDiscountCodeItem, IDiscountCodeTableFilters } from 'src/types/discount-code';
-import { useGetDiscountCodes } from 'src/actions/discount-codes';
-import { Stack } from '@mui/material';
-import DatePickerButton from 'src/components/button/date-button';
+import { DiscountCodesTableFiltersResult } from '../discount-codes-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -154,7 +150,7 @@ export function DiscountCodesListView() {
             { name: 'discount Codes' },
           ]}
           action={
-            <Stack direction={'row'} gap={'1rem'}>
+            <Stack direction="row" gap="1rem">
               <DatePickerButton />
               <AddDiscountCodeFormDialog />
             </Stack>

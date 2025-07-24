@@ -1,10 +1,12 @@
-import useSWR, { mutate } from 'swr';
+import type { IBannerItem } from 'src/types/banner';
+
+import { toast } from 'sonner';
 import { useMemo } from 'react';
+import useSWR, { mutate } from 'swr';
 
 import axios, { fetcher, endpoints } from 'src/utils/axios';
-import { IBannerItem } from 'src/types/banner';
+
 import { getAccessToken } from 'src/auth/context/sanctum';
-import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 

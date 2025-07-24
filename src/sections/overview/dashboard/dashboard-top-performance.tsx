@@ -1,4 +1,5 @@
 'use client';
+
 import type { BoxProps } from '@mui/material/Box';
 import type { CardProps } from '@mui/material/Card';
 
@@ -6,25 +7,20 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Rating from '@mui/material/Rating';
 import Avatar from '@mui/material/Avatar';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import { svgIconClasses } from '@mui/material/SvgIcon';
 
 import { useTabs } from 'src/hooks/use-tabs';
 
 import { fData, fCurrency, fShortenNumber } from 'src/utils/format-number';
 
+import { _mock } from 'src/_mock';
+
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { CustomTabs } from 'src/components/custom-tabs';
-import { _mock, _topSearch } from 'src/_mock';
-import { SEARCH_LOGS_ENDPOINT } from 'src/actions/search-logs';
-import { authedFetcher } from 'src/utils/axios';
-import { toast } from 'sonner';
-import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 

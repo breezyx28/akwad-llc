@@ -1,13 +1,13 @@
 'use client';
 
-import type { IUserItem, IUserTableFilters } from 'src/types/user';
+
+import type { IBrandItem, IBrandTableFilters } from 'src/types/brand';
 
 import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
+import { Stack } from '@mui/material';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
@@ -16,20 +16,19 @@ import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
-import { varAlpha } from 'src/theme/styles';
+import { useGetBrands } from 'src/actions/brands';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _brandFilter, _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
+import { _brandFilter, USER_STATUS_OPTIONS } from 'src/_mock';
 
-import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import DatePickerButton from 'src/components/button/date-button';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -43,15 +42,10 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { BrandTableToolbar } from '../brand-table-toolbar';
-import { BrandTableFiltersResult } from '../brand-table-filters-result';
-import { IBrandItem, IBrandTableFilters } from 'src/types/brand';
-import { _brandList } from 'src/_mock/_brand';
 import { BrandTableRow } from '../brand-table-row';
+import { BrandTableToolbar } from '../brand-table-toolbar';
 import { AddBrandFormDialog } from '../add-brand-form-dialog';
-import { useGetBrands } from 'src/actions/brands';
-import DatePickerButton from 'src/components/button/date-button';
-import { Stack } from '@mui/material';
+import { BrandTableFiltersResult } from '../brand-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -157,7 +151,7 @@ export function BrandListView() {
             { name: 'List' },
           ]}
           action={
-            <Stack direction={'row'} gap={'1rem'}>
+            <Stack direction="row" gap="1rem">
               <DatePickerButton />
               <AddBrandFormDialog />
             </Stack>

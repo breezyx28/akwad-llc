@@ -1,4 +1,5 @@
 import { CONFIG } from 'src/config-global';
+
 import { SignInView } from './view/sign-in-view';
 
 // ----------------------------------------------------------------------

@@ -1,8 +1,9 @@
+import type { IApplicationItem } from 'src/types/application';
+
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
 import { endpoints, authedFetcher } from 'src/utils/axios';
-import { IApplicationItem } from 'src/types/application';
 
 // ----------------------------------------------------------------------
 

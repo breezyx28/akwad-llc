@@ -1,9 +1,10 @@
 import type { AxiosRequestConfig } from 'axios';
 
 import axios from 'axios';
-import { getAccessToken } from 'src/auth/context/sanctum';
 
 import { CONFIG } from 'src/config-global';
+
+import { getAccessToken } from 'src/auth/context/sanctum';
 
 // ----------------------------------------------------------------------
 
@@ -88,7 +89,7 @@ export const endpoints = {
     list: '/api/category/index',
   },
   verify: {
-    checkOTP: '/api/user/verify-otp', //-----  /verify-otp?otp=356489
+    checkOTP: '/api/user/verify-otp', // -----  /verify-otp?otp=356489
   },
   brands: {
     banners: {

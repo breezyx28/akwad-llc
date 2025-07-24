@@ -1,10 +1,8 @@
-import useSWR, { mutate } from 'swr';
-import { useMemo, useState } from 'react';
 
-import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
-import { IBrandItem } from 'src/types/brand';
+import axios, { endpoints } from 'src/utils/axios';
+
 import { getAccessToken } from 'src/auth/context/sanctum';
-import { IDiscountCodeItem as IVerificationItem } from 'src/types/discount-code';
+
 
 // ----------------------------------------------------------------------
 

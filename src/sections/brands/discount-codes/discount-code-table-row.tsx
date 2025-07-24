@@ -1,11 +1,10 @@
-import type { IUserItem } from 'src/types/user';
 
-import Box from '@mui/material/Box';
+import type { IDiscountCodeItem } from 'src/types/discount-code';
+
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
@@ -15,16 +14,14 @@ import IconButton from '@mui/material/IconButton';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { Label } from 'src/components/label';
+import { deleteDiscountCode } from 'src/actions/discount-codes';
+import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
+
 import { Iconify } from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
-import { IDiscountCodeItem } from 'src/types/discount-code';
 import { UpdateDiscountCodeFormDialog } from './update-discount-code-form-dialog';
-import { deleteDiscountCode } from 'src/actions/discount-codes';
-import { toast } from 'sonner';
-import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
 
 // ----------------------------------------------------------------------
 

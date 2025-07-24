@@ -1,6 +1,6 @@
-import type { IBrandTableFilters } from 'src/types/brand';
 import type { SelectChangeEvent } from '@mui/material/Select';
 import type { UseSetStateReturn } from 'src/hooks/use-set-state';
+import type { IDiscountCodeTableFilters } from 'src/types/discount-code';
 
 import React, { useCallback } from 'react';
 
@@ -9,6 +9,7 @@ import Select from '@mui/material/Select';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
+import { ListSubheader } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
@@ -18,8 +19,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { Iconify } from 'src/components/iconify';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
-import { ListSubheader } from '@mui/material';
-import { IDiscountCodeTableFilters } from 'src/types/discount-code';
 
 // ----------------------------------------------------------------------
 

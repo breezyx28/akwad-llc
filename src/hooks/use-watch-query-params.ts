@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Custom hook to return 'start_date' and 'end_date' from the URL query params
 const useWatchQueryParams = () => {

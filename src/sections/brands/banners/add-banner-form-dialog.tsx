@@ -1,29 +1,26 @@
+import { toast } from 'sonner';
+import { z as zod } from 'zod';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { LoadingButton } from '@mui/lab';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import { Box , Grid , Stack, MenuItem } from '@mui/material';
+
 import { RouterLink } from 'src/routes/components';
+
 import { useBoolean } from 'src/hooks/use-boolean';
-import { paths } from 'src/routes/paths';
-import { Iconify } from 'src/components/iconify';
-import { Card, FormControlLabel, MenuItem, Stack, Switch } from '@mui/material';
-import { Form, Field, schemaHelper } from 'src/components/hook-form';
-import { Grid } from '@mui/material';
-import { useMemo } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, Controller } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z as zod } from 'zod';
-import { Label } from 'src/components/label';
-import { Box } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import { fData } from 'src/utils/format-number';
-import { useGetCategories } from 'src/actions/categories';
-import { useGetBrands } from 'src/actions/brands';
+
 import { addBanner } from 'src/actions/banners';
+import { useGetBrands } from 'src/actions/brands';
+
+import { Iconify } from 'src/components/iconify';
+import { Form, Field, schemaHelper } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -99,12 +96,12 @@ export function AddBannerFormDialog() {
         Add Banner
       </Button>
 
-      <Dialog fullWidth={true} maxWidth={'md'} open={dialog.value} onClose={dialog.onFalse}>
+      <Dialog fullWidth maxWidth="md" open={dialog.value} onClose={dialog.onFalse}>
         <DialogTitle>Add Banner</DialogTitle>
 
         <DialogContent>
           <Form methods={methods} onSubmit={onSubmit}>
-            <Stack display={'flex'} direction={'column'} spacing={3} sx={{ pt: 3 }}>
+            <Stack display="flex" direction="column" spacing={3} sx={{ pt: 3 }}>
               <Grid xs={12} md={4}>
                 <Box sx={{ mb: 5 }}>
                   <Field.UploadPhoto
@@ -166,7 +163,7 @@ export function AddBannerFormDialog() {
               document.getElementById('brand-banner-submit-btn')?.click();
             }}
           >
-            {'Add Banner'}
+            Add Banner
           </LoadingButton>
         </DialogActions>
       </Dialog>

@@ -1,21 +1,23 @@
+import type { IDiscountCodeItem } from 'src/types/discount-code';
+
+import { toast } from 'sonner';
+import { z as zod } from 'zod';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { LoadingButton } from '@mui/lab';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import { MenuItem, Stack } from '@mui/material';
-import { Form, Field } from 'src/components/hook-form';
-import { Grid } from '@mui/material';
-import { useMemo } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z as zod } from 'zod';
-import { Box } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { Box , Grid , Stack, MenuItem } from '@mui/material';
+
 import { useGetBrands } from 'src/actions/brands';
 import { updateDiscountCode } from 'src/actions/discount-codes';
-import { IDiscountCodeItem } from 'src/types/discount-code';
+
+import { Form, Field } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -85,12 +87,12 @@ export function UpdateDiscountCodeFormDialog({
   });
 
   return (
-    <Dialog fullWidth={true} maxWidth={'md'} open={dialog.open} onClose={dialog.onClose}>
+    <Dialog fullWidth maxWidth="md" open={dialog.open} onClose={dialog.onClose}>
       <DialogTitle>Update Discount Code</DialogTitle>
 
       <DialogContent>
         <Form methods={methods} onSubmit={onSubmit}>
-          <Stack display={'flex'} direction={'column'} spacing={3} sx={{ pt: 3 }}>
+          <Stack display="flex" direction="column" spacing={3} sx={{ pt: 3 }}>
             <Grid xs={12} md={4}>
               <Box sx={{ mb: 5 }}>
                 <Field.UploadPhoto
@@ -165,7 +167,7 @@ export function UpdateDiscountCodeFormDialog({
             document.getElementById('update-discount-code-submit-btn')?.click();
           }}
         >
-          {'Edit Discount Code'}
+          Edit Discount Code
         </LoadingButton>
       </DialogActions>
     </Dialog>

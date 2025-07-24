@@ -82,7 +82,7 @@
     "lowlight": "^3.1.0",
     "mapbox-gl": "^3.4.0",
     "mui-one-time-password-input": "^2.0.2",
-    "next": "^14.2.4",
+    "next": "^15.0.3-canary.5",
     "nprogress": "^0.2.0",
     "react": "^18.3.1",
     "react-apexcharts": "^1.4.1",
@@ -136,5 +136,8 @@
     "eslint-plugin-unused-imports": "^3.2.0",
     "prettier": "^3.3.2",
     "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

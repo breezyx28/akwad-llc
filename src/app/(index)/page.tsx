@@ -1,7 +1,8 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import React from 'react';
+import { useRouter } from 'next/navigation';
+
 import { paths } from 'src/routes/paths';
 
 export default function Page() {

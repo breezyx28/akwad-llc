@@ -1,14 +1,16 @@
-import type { IPostItem } from 'src/types/blog';
 
-import { useCallback, useMemo, useState } from 'react';
+import type { IUsersItem } from 'src/types/users';
+
+import { toast } from 'sonner';
 import useSWR, { mutate } from 'swr';
-import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
-import { IUsersItem } from 'src/types/users';
+import { useMemo, useState, useCallback } from 'react';
+
+import axios, { endpoints, authedFetcher } from 'src/utils/axios';
+
 import { getAccessToken } from 'src/auth/context/sanctum';
+
 import { BRAND_ENDPOINT } from './brands';
 import { BANNER_ENDPOINT } from './banners';
-import { toast } from 'sonner';
-import useWatchQueryParams from 'src/hooks/use-watch-query-params';
 
 // ----------------------------------------------------------------------
 

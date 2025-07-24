@@ -1,24 +1,24 @@
 'use client';
 
 import { z as zod } from 'zod';
+import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useTheme } from '@mui/material/styles';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { EmailInboxIcon } from 'src/assets/icons';
+import { checkOTP } from 'src/actions/verification';
 
 import { Iconify } from 'src/components/iconify';
 import { Form, Field } from 'src/components/hook-form';
-import { checkOTP } from 'src/actions/verification';
-import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 

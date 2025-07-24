@@ -1,4 +1,5 @@
 import { CONFIG } from 'src/config-global';
+
 import { DiscountCodesListView } from 'src/sections/brands/discount-codes/view';
 
 // ----------------------------------------------------------------------

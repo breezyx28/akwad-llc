@@ -1,4 +1,5 @@
 import { CONFIG } from 'src/config-global';
+
 import { BrandListView } from 'src/sections/brands/view';
 
 // ----------------------------------------------------------------------

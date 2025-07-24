@@ -1,13 +1,14 @@
+import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import FormHelperText from '@mui/material/FormHelperText';
 
+import { uploadImage } from 'src/actions/users';
+
 import { Upload, UploadBox } from '../upload';
+import { UploadPhoto } from '../upload/upload-photo';
 
 import type { UploadProps } from '../upload';
-import { UploadPhoto } from '../upload/upload-photo';
-import { uploadImage } from 'src/actions/users';
-import React from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +36,7 @@ export function RHFUploadPhoto({ name, ...other }: Props) {
         const onDrop = async (acceptedFiles: File[]) => {
           const value = acceptedFiles[0];
 
-          let image: FormData = new FormData();
+          const image: FormData = new FormData();
 
           setValue(name, value, { shouldValidate: true });
 

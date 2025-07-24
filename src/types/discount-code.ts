@@ -1,4 +1,4 @@
-import { IBrandItem } from './brand';
+import type { IBrandItem } from './brand';
 // ----------------------------------------------------------------------
 
 export type IDiscountCodeTableFilters = {

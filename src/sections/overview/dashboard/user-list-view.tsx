@@ -5,11 +5,10 @@ import type { IUserItem, IUserTableFilters } from 'src/types/user';
 import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
@@ -21,16 +20,12 @@ import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
-import { varAlpha } from 'src/theme/styles';
-import { DashboardContent } from 'src/layouts/dashboard';
-import { _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
+import { _userList } from 'src/_mock';
 
-import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
@@ -44,7 +39,6 @@ import {
 } from 'src/components/table';
 
 import { UserTableRow } from './user-table-row';
-import { Stack, Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -121,9 +115,9 @@ export function UserListView() {
       <Card>
         <Box
           sx={{ p: 2.5 }}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'space-between'}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
         >
           <Typography variant="h6">Applications</Typography>
           <Button

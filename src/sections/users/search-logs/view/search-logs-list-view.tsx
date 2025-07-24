@@ -1,36 +1,35 @@
 'use client';
 
-import type { IUserItem, IUserTableFilters } from 'src/types/user';
+
+import type { ISearchLogsItem, ISearchLogsTableFilters } from 'src/types/search-logs';
 
 import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
+import { authedFetcher } from 'src/utils/axios';
+
 import { DashboardContent } from 'src/layouts/dashboard';
+import { useGetSearchLogs, SEARCH_LOGS_ENDPOINT } from 'src/actions/search-logs';
 
 import { toast } from 'src/components/snackbar';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
+import DatePickerButton from 'src/components/button/date-button';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import {
   useTable,
   emptyRows,
-  rowInPage,
   TableNoData,
   getComparator,
   TableEmptyRows,
@@ -40,10 +39,6 @@ import {
 } from 'src/components/table';
 
 import { SearchLogsTableRow } from '../search-logs-table-row';
-import { ISearchLogsItem, ISearchLogsTableFilters } from 'src/types/search-logs';
-import { SEARCH_LOGS_ENDPOINT, useGetSearchLogs } from 'src/actions/search-logs';
-import DatePickerButton from 'src/components/button/date-button';
-import { authedFetcher } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -95,8 +90,7 @@ export function SearchLogsListView() {
   }, []);
 
   return (
-    <>
-      <DashboardContent>
+    <DashboardContent>
         <CustomBreadcrumbs
           heading="Search Logs"
           links={[
@@ -183,7 +177,6 @@ export function SearchLogsListView() {
           />
         </Card>
       </DashboardContent>
-    </>
   );
 }
 

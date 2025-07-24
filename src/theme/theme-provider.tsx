@@ -17,9 +17,6 @@ import { useSettingsContext } from 'src/components/settings';
 import { createTheme } from './create-theme';
 import { RTL } from './with-settings/right-to-left';
 import { schemeConfig } from './color-scheme-script';
-import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
-import { TypographyProps } from '@mui/material';
-import EmojiTypography from 'src/components/typography/EmojiTypography';
 
 // ----------------------------------------------------------------------
 

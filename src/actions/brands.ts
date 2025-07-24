@@ -1,10 +1,12 @@
-import useSWR, { mutate } from 'swr';
-import { useMemo, useState } from 'react';
+import type { IBrandItem } from 'src/types/brand';
 
-import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
-import { IBrandItem } from 'src/types/brand';
-import { getAccessToken } from 'src/auth/context/sanctum';
 import { toast } from 'sonner';
+import { useMemo } from 'react';
+import useSWR, { mutate } from 'swr';
+
+import axios, { endpoints, authedFetcher } from 'src/utils/axios';
+
+import { getAccessToken } from 'src/auth/context/sanctum';
 
 // ----------------------------------------------------------------------
 

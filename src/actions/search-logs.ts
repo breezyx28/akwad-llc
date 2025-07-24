@@ -1,11 +1,10 @@
-import type { IPostItem } from 'src/types/blog';
+
+import type { ISearchLogsItem } from 'src/types/search-logs';
 
 import useSWR from 'swr';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
-import { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
-import { ISearchLogsItem } from 'src/types/search-logs';
-import useWatchQueryParams from 'src/hooks/use-watch-query-params';
+import { endpoints, authedFetcher } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 

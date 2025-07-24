@@ -1,4 +1,5 @@
 import { CONFIG } from 'src/config-global';
+
 import { SearchLogsListView } from 'src/sections/users/search-logs/view/search-logs-list-view';
 
 // ----------------------------------------------------------------------

@@ -1,6 +1,6 @@
 import React from 'react';
-import emojiData from 'emoji-datasource-apple/emoji.json';
 import emojiRegex from 'emoji-regex';
+import emojiData from 'emoji-datasource-apple/emoji.json';
 
 // Interface for emoji data
 interface Emoji {

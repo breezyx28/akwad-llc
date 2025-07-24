@@ -1,4 +1,3 @@
-import { createPaletteChannel } from './styles';
 import type { ThemeUpdateOptions } from './types';
 
 // ----------------------------------------------------------------------

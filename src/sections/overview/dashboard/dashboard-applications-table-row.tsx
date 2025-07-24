@@ -1,28 +1,23 @@
-import type { IUserItem } from 'src/types/user';
 
-import Box from '@mui/material/Box';
+import type { IApplicationItem } from 'src/types/application';
+
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
-import IconButton from '@mui/material/IconButton';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { Label } from 'src/components/label';
+import { _mock } from 'src/_mock';
+
 import { Iconify } from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
-
-import { UserQuickEditForm } from './user-quick-edit-form';
-import { IApplicationItem } from 'src/types/application';
-import { _mock } from 'src/_mock';
 
 // ----------------------------------------------------------------------
 

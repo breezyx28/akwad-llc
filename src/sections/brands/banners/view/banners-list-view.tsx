@@ -1,11 +1,12 @@
 'use client';
 
+import type { IBannerItem, IBannerTableFilters } from 'src/types/banner';
+
 import React, { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
+import { Stack } from '@mui/material';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
@@ -18,15 +19,14 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useSetState } from 'src/hooks/use-set-state';
 
-import { varAlpha } from 'src/theme/styles';
+import { useGetBanners } from 'src/actions/banners';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
 
-import { Label } from 'src/components/label';
 import { toast } from 'src/components/snackbar';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import DatePickerButton from 'src/components/button/date-button';
 import { CustomBreadcrumbs } from 'src/components/custom-breadcrumbs';
 import {
   useTable,
@@ -42,10 +42,6 @@ import {
 
 import { BannerTableRow } from '../banner-table-row';
 import { AddBannerFormDialog } from '../add-banner-form-dialog';
-import { useGetBanners } from 'src/actions/banners';
-import { IBannerItem, IBannerTableFilters } from 'src/types/banner';
-import { Stack } from '@mui/material';
-import DatePickerButton from 'src/components/button/date-button';
 
 // ----------------------------------------------------------------------
 
@@ -146,7 +142,7 @@ export function BannersListView() {
             { name: 'Banner' },
           ]}
           action={
-            <Stack direction={'row'} gap={'1rem'}>
+            <Stack direction="row" gap="1rem">
               <DatePickerButton />
               <AddBannerFormDialog />
             </Stack>

@@ -1,33 +1,32 @@
-import type { IUserItem } from 'src/types/user';
+
+import type { IBrandItem } from 'src/types/brand';
+
+import { toast } from 'sonner';
+import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import { Switch, FormControlLabel } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { Label } from 'src/components/label';
+import { deleteBrand, updateBrandStatus } from 'src/actions/brands';
+import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
+
 import { Iconify } from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { usePopover, CustomPopover } from 'src/components/custom-popover';
 
-import { BrandQuickEditForm } from './brand-quick-edit-form';
-import { IBrandItem } from 'src/types/brand';
-import { FormControlLabel, Switch } from '@mui/material';
-import { deleteBrand, updateBrandStatus } from 'src/actions/brands';
-import { useState } from 'react';
 import { UpdateBrandFormDialog } from './update-brand-form-dialog';
-import { toast } from 'sonner';
-import { convertTextToAppleEmoji } from 'src/lib/convert-to-apple-emoji';
 
 // ----------------------------------------------------------------------
 
@@ -120,7 +119,7 @@ export function BrandTableRow({ row, selected, onEditRow, onSelectRow, onDeleteR
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>
-          <a href="#">{'not-set'}</a>
+          <a href="#">not-set</a>
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row.opend}</TableCell>

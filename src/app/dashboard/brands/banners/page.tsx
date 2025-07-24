@@ -1,4 +1,5 @@
 import { CONFIG } from 'src/config-global';
+
 import { BannersListView } from 'src/sections/brands/banners/view';
 
 // ----------------------------------------------------------------------

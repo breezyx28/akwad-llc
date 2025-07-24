@@ -1,12 +1,14 @@
-import useSWR, { mutate } from 'swr';
-import React, { useMemo, useState } from 'react';
+import type { IDiscountCodeItem } from 'src/types/discount-code';
 
-import axios, { fetcher, endpoints, authedFetcher } from 'src/utils/axios';
-import { IBrandItem } from 'src/types/brand';
-import { getAccessToken } from 'src/auth/context/sanctum';
-import { IDiscountCodeItem } from 'src/types/discount-code';
 import { toast } from 'sonner';
+import useSWR, { mutate } from 'swr';
+import React, { useMemo } from 'react';
+
 import useWatchQueryParams from 'src/hooks/use-watch-query-params';
+
+import axios, { endpoints, authedFetcher } from 'src/utils/axios';
+
+import { getAccessToken } from 'src/auth/context/sanctum';
 
 // ----------------------------------------------------------------------
 
