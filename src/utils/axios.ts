@@ -10,6 +10,19 @@ import { getAccessToken } from 'src/auth/context/sanctum';
 
 const axiosInstance = axios.create({ baseURL: CONFIG.site.serverUrl, withCredentials: true });
 
+// Attach token to every request
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    const token = getAccessToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Handle responses
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong!')

@@ -31,13 +31,21 @@
     "darker": "#003768",
     "contrastText": "#FFFFFF"
   },
+  "green": {
+    "lighter": "#81C784",
+    "light": "#66BB6A",
+    "main": "#4CAF50",
+    "dark": "#388E3C",
+    "darker": "#1B5E20",
+    "contrastText": "#FFFFFF"
+  },
   "success": {
     "lighter": "#D3FCD2",
     "light": "#77ED8B",
     "main": "#22C55E",
     "dark": "#118D57",
     "darker": "#065E49",
-    "contrastText": "#ffffff"
+    "contrastText": "#FFFFFF"
   },
   "warning": {
     "lighter": "#FFF5CC",

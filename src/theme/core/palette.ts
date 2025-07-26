@@ -70,14 +70,17 @@ export const grey = createPaletteChannel(COLORS.grey);
 export const primary = createPaletteChannel(COLORS.black);
 
 // old Primary
-export const green = {
-  main: '#4caf50',
-  lighter: '#81c784',
-  darker: '#388e3c',
-  lighterChannel: '129 199 132',
-  darkerChannel: '56 142 60',
-  contrastText: '#fff',
-};
+// export const green = {
+//   main: '#4caf50',
+//   lighter: '#81c784',
+//   darker: '#388e3c',
+//   lighterChannel: '129 199 132',
+//   darkerChannel: '56 142 60',
+//   contrastText: '#fff',
+// };
+
+// Green
+export const green = createPaletteChannel(COLORS.green);
 
 // Secondary
 export const secondary = createPaletteChannel(COLORS.secondary);

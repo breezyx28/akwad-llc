@@ -77,6 +77,9 @@ export function createPaletteChannel(hexPalette: Record<string, string>) {
  * Color with alpha channel
  */
 export function varAlpha(color: string, opacity = 1) {
+  if (typeof color !== 'string') {
+    throw new Error(`[Alpha]: color must be a string, received: ${color}`);
+  }
   const unsupported =
     color.startsWith('#') ||
     color.startsWith('rgb') ||
@@ -85,15 +88,14 @@ export function varAlpha(color: string, opacity = 1) {
 
   if (unsupported) {
     throw new Error(
-      `[Alpha]: Unsupported color format "${color}".
-       Supported formats are:
-       - RGB channels: "0 184 217".
-       - CSS variables with "Channel" prefix: "var(--palette-common-blackChannel, #000000)".
-       Unsupported formats are:
-       - Hex: "#00B8D9".
-       - RGB: "rgb(0, 184, 217)".
-       - RGBA: "rgba(0, 184, 217, 1)".
-       `
+      `[Alpha]: Unsupported color format "${color}".\n` +
+        `Supported formats are:\n` +
+        `- RGB channels: "0 184 217".\n` +
+        `- CSS variables with "Channel" prefix: "var(--palette-common-blackChannel, #000000)".\n` +
+        `Unsupported formats are:\n` +
+        `- Hex: "#00B8D9".\n` +
+        `- RGB: "rgb(0, 184, 217)".\n` +
+        `- RGBA: "rgba(0, 184, 217, 1)".\n`
     );
   }
 

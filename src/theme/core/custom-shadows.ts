@@ -1,5 +1,5 @@
 import { varAlpha } from '../styles';
-import { grey, info, error, common, primary, success, warning, secondary } from './palette';
+import { grey, info, error, common, primary, success, warning, secondary, green } from './palette';
 
 import type { ThemeColorScheme } from '../types';
 
@@ -17,6 +17,7 @@ export interface CustomShadows {
   primary?: string;
   secondary?: string;
   info?: string;
+  green?: string;
   success?: string;
   warning?: string;
   error?: string;
@@ -64,6 +65,7 @@ export function customShadows(colorScheme: ThemeColorScheme) {
     secondary: createShadowColor(secondary.mainChannel),
     info: createShadowColor(info.mainChannel),
     success: createShadowColor(success.mainChannel),
+    green: createShadowColor(green.mainChannel),
     warning: createShadowColor(warning.mainChannel),
     error: createShadowColor(error.mainChannel),
   };
