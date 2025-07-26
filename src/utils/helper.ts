@@ -99,6 +99,11 @@ export function isEqual(a: any, b: any): boolean {
       return false;
     }
 
+    // Prevent circular references by checking if objects are the same reference
+    if (a === b) {
+      return true;
+    }
+
     return keysA.every((key) => isEqual(a[key], b[key]));
   }
 
@@ -111,18 +116,26 @@ function isObject(item: any) {
   return item && typeof item === 'object' && !Array.isArray(item);
 }
 
+// Safe merge function that prevents circular references
 export const merge = (target: any, ...sources: any[]): any => {
   if (!sources.length) return target;
 
   const source = sources.shift();
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (const key in source) {
-    if (isObject(source[key])) {
-      if (!target[key]) Object.assign(target, { [key]: {} });
-      merge(target[key], source[key]);
-    } else {
-      Object.assign(target, { [key]: source[key] });
+  if (isObject(target) && isObject(source)) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) {
+          Object.assign(target, { [key]: {} });
+        }
+        // Prevent circular references by checking if we're already processing this object
+        if (source[key] !== target[key]) {
+          merge(target[key], source[key]);
+        }
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
     }
   }
 
