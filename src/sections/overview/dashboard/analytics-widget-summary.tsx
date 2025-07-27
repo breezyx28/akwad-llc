@@ -36,7 +36,7 @@ export function AnalyticsWidgetSummary({
   total,
   chart,
   percent,
-  color = 'green',
+  color = 'success',
   sx,
   ...other
 }: Props) {
